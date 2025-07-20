@@ -1,0 +1,8 @@
+Flask==2.3.3
+Flask-CORS==4.0.0
+Flask-SocketIO==5.3.6
+python-socketio==5.8.0
+Werkzeug==2.3.7
+psutil==5.9.5
+scapy==2.5.0
+python-magic==0.4.27
