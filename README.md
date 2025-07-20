@@ -81,27 +81,46 @@ A comprehensive web application for replaying network packet capture (PCAP) file
 - Linux environment (for network interface access)
 - Root/sudo privileges (required for tcpreplay network access)
 
-### Installation
+### Option 1: Quick Deploy (Recommended)
+**One-command deployment using pre-built Docker images:**
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd PCAP_Replaya
-   ```
+```bash
+curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/quick-deploy.sh | sudo bash
+```
 
-2. **Start the application (requires sudo)**
-   ```bash
-   sudo ./start.sh
-   ```
-   
-   Or manually with Docker Compose:
-   ```bash
-   sudo docker-compose up --build
-   ```
+This will:
+- Download the production configuration
+- Pull pre-built images from Docker Hub
+- Generate secure environment variables
+- Start the application automatically
 
-3. **Access the application**
-   - Frontend: http://localhost
-   - Backend API: http://localhost:5000/api
+### Option 2: Production Deployment
+**Using pre-built Docker images:**
+
+```bash
+# Download production docker-compose file
+curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/docker-compose.prod.yml -o docker-compose.yml
+
+# Start with pre-built images
+sudo docker-compose up -d
+```
+
+### Option 3: Development Build
+**Build from source:**
+
+```bash
+# Clone the repository
+git clone https://github.com/blink-zero/pcap-replaya.git
+cd pcap-replaya
+
+# Build and start
+sudo docker-compose up --build
+```
+
+### Access the Application
+- Frontend: http://localhost
+- Backend API: http://localhost:5000/api
+- Works with any IP address (localhost, 10.150.0.140, domain names)
 
 ### Development Setup
 
