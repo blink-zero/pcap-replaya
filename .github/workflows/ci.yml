@@ -95,7 +95,7 @@ jobs:
     - name: Test Docker Compose
       run: |
         # Test that docker-compose file is valid
-        docker-compose config
+        docker compose config
 
   security-scan:
     runs-on: ubuntu-latest
