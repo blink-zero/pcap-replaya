@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Card,
@@ -21,13 +21,14 @@ const ProgressMonitor = ({ uploadedFile, replayConfig, onReplayComplete }) => {
   const [replayStatus, setReplayStatus] = useState(null);
   const [isReplaying, setIsReplaying] = useState(false);
   const [error, setError] = useState(null);
-  const [progress, setProgress] = useState(0);
-  const [replayStats, setReplayStats] = useState({
-    packets_sent: 0,
-    bytes_sent: 0,
-    elapsed_time: 0,
-  });
   const [autoRefreshInterval, setAutoRefreshInterval] = useState(null);
+
+  const stopAutoRefresh = useCallback(() => {
+    if (autoRefreshInterval) {
+      clearInterval(autoRefreshInterval);
+      setAutoRefreshInterval(null);
+    }
+  }, [autoRefreshInterval]);
 
   useEffect(() => {
     // Initialize socket connection - use current host (nginx will proxy to backend)
@@ -59,12 +60,7 @@ const ProgressMonitor = ({ uploadedFile, replayConfig, onReplayComplete }) => {
     // Listen for progress updates
     newSocket.on('replay_progress', (data) => {
       console.log('Replay progress update:', data);
-      setProgress(data.progress || 0);
-      setReplayStats({
-        packets_sent: data.packets_sent || 0,
-        bytes_sent: data.bytes_sent || 0,
-        elapsed_time: data.elapsed_time || 0,
-      });
+      // Progress updates are handled via replay status
     });
 
     // Cleanup on unmount
@@ -101,12 +97,6 @@ const ProgressMonitor = ({ uploadedFile, replayConfig, onReplayComplete }) => {
     setAutoRefreshInterval(interval);
   };
 
-  const stopAutoRefresh = () => {
-    if (autoRefreshInterval) {
-      clearInterval(autoRefreshInterval);
-      setAutoRefreshInterval(null);
-    }
-  };
 
   const checkReplayStatus = async () => {
     try {
@@ -114,9 +104,6 @@ const ProgressMonitor = ({ uploadedFile, replayConfig, onReplayComplete }) => {
       const status = response.data;
       setReplayStatus(status);
       setIsReplaying(status.status === 'running' || status.status === 'starting');
-      if (status.progress_percent) {
-        setProgress(status.progress_percent);
-      }
     } catch (err) {
       console.error('Error checking replay status:', err);
     }
@@ -131,8 +118,6 @@ const ProgressMonitor = ({ uploadedFile, replayConfig, onReplayComplete }) => {
     try {
       setError(null);
       setIsReplaying(true);
-      setProgress(0);
-      setReplayStats({ packets_sent: 0, bytes_sent: 0, elapsed_time: 0 });
 
       const config = {
         file_id: uploadedFile.file_id,
