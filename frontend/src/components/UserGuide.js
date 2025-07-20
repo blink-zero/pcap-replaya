@@ -165,13 +165,23 @@ const UserGuide = ({ currentStep = 0, uploadedFile, replayConfig }) => {
           <Typography variant="subtitle2" gutterBottom>
             💡 Pro Tips:
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            • Use <strong>Multiplier mode</strong> to speed up/slow down based on original timing<br />
-            • Use <strong>PPS mode</strong> for precise packet rate control regardless of original timing<br />
-            • Higher PPS values will replay faster but may be limited by network interface capabilities<br />
-            • Large files (&gt;100k packets) will have limited analysis display but full replay capability<br />
-            • Monitor the auto-refreshing status for real-time updates during replay
-          </Typography>
+          <Box component="ul" sx={{ m: 0, pl: 2 }}>
+            <Typography component="li" variant="body2" color="text.secondary">
+              Use <strong>Multiplier mode</strong> to speed up/slow down based on original timing
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              Use <strong>PPS mode</strong> for precise packet rate control regardless of original timing
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              Higher PPS values will replay faster but may be limited by network interface capabilities
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              Large files (&gt;100k packets) will have limited analysis display but full replay capability
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              Monitor the auto-refreshing status for real-time updates during replay
+            </Typography>
+          </Box>
         </Box>
       </CardContent>
     </Card>
