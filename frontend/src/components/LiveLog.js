@@ -30,7 +30,6 @@ const LiveLog = () => {
   const [autoScroll, setAutoScroll] = useState(true);
   const [filterLevel, setFilterLevel] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
-  const [socket, setSocket] = useState(null);
   const [error, setError] = useState(null);
   const [stats, setStats] = useState({});
   const logContainerRef = useRef(null);
@@ -48,7 +47,6 @@ const LiveLog = () => {
       path: '/socket.io/',
       transports: ['websocket', 'polling']
     });
-    setSocket(newSocket);
 
     // Connection event handlers
     newSocket.on('connect', () => {

@@ -28,7 +28,6 @@ import {
   PlayArrow as PlayIcon,
   Refresh as RefreshIcon,
   Info as InfoIcon,
-  Delete as DeleteIcon,
   FilterList as FilterIcon,
 } from '@mui/icons-material';
 import { apiService, formatFileSize, formatDuration, formatSpeed } from '../services/api';

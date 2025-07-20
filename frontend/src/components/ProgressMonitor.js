@@ -21,7 +21,6 @@ const ProgressMonitor = ({ uploadedFile, replayConfig, onReplayComplete }) => {
   const [replayStatus, setReplayStatus] = useState(null);
   const [isReplaying, setIsReplaying] = useState(false);
   const [error, setError] = useState(null);
-  const [socket, setSocket] = useState(null);
   const [progress, setProgress] = useState(0);
   const [replayStats, setReplayStats] = useState({
     packets_sent: 0,
@@ -42,7 +41,6 @@ const ProgressMonitor = ({ uploadedFile, replayConfig, onReplayComplete }) => {
       path: '/socket.io/',
       transports: ['websocket', 'polling']
     });
-    setSocket(newSocket);
 
     // Listen for replay status updates
     newSocket.on('replay_status', (data) => {
@@ -73,7 +71,7 @@ const ProgressMonitor = ({ uploadedFile, replayConfig, onReplayComplete }) => {
     return () => {
       newSocket.disconnect();
     };
-  }, [onReplayComplete]);
+  }, [onReplayComplete, stopAutoRefresh]);
 
   useEffect(() => {
     // Check initial replay status

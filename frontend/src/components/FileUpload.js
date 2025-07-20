@@ -11,7 +11,6 @@ import {
   Card,
   CardContent,
   Button,
-  IconButton,
   Tooltip,
 } from '@mui/material';
 import {
@@ -19,7 +18,6 @@ import {
   CheckCircle as CheckIcon,
   Error as ErrorIcon,
   Refresh as RefreshIcon,
-  Delete as DeleteIcon,
 } from '@mui/icons-material';
 import { apiService, formatFileSize } from '../services/api';
 
@@ -75,11 +73,6 @@ const FileUpload = ({ onFileUploaded, uploadedFile, setUploadedFile }) => {
     maxFiles: 1,
     maxSize: 1024 * 1024 * 1024, // 1GB
   });
-
-  const formatProtocols = (protocols) => {
-    if (!protocols || protocols.length === 0) return 'None detected';
-    return protocols.join(', ');
-  };
 
   const handleReplaceFile = () => {
     setUploadedFile(null);
