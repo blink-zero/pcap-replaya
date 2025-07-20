@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18-alpine as build
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
@@ -11,6 +11,10 @@ RUN npm install
 
 # Copy source code
 COPY frontend/ .
+
+# Set environment variables for build
+ENV CI=false
+ENV GENERATE_SOURCEMAP=false
 
 # Build the application
 RUN npm run build
