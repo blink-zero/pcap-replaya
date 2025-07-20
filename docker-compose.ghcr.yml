@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  backend:
+    image: ghcr.io/blink-zero/pcap-replaya-backend:latest
+    container_name: pcap-replaya-backend
+    environment:
+      - FLASK_ENV=production
+      - UPLOAD_FOLDER=/tmp/pcap_uploads
+      - LOG_FILE=/var/log/pcap_replaya.log
+      - LOG_LEVEL=INFO
+      # Set your own secret key in production
+      - SECRET_KEY=${SECRET_KEY:-please-change-this-secret-key-in-production}
+    volumes:
+      - pcap_uploads:/tmp/pcap_uploads
+      - logs:/var/log
+    # Use host network to access host machine interfaces
+    network_mode: host
+    # Required for network interface access and packet replay
+    privileged: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:5000/api/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    image: ghcr.io/blink-zero/pcap-replaya-frontend:latest
+    container_name: pcap-replaya-frontend
+    depends_on:
+      - backend
+    # Use host network to communicate with backend
+    network_mode: host
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  pcap_uploads:
+    driver: local
+  logs:
+    driver: local
