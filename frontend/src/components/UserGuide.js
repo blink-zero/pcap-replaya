@@ -138,7 +138,7 @@ const UserGuide = ({ currentStep = 0, uploadedFile, replayConfig }) => {
                 </Typography>
                 <List dense>
                   {step.details.map((detail, detailIndex) => (
-                    <ListItem key={detailIndex} sx={{ py: 0.5, pl: detail.startsWith('  ') ? 4 : 2 }}>
+                    <ListItem key={detailIndex} sx={{ py: 0.5, pl: detail.startsWith('\u0020\u0020') ? 4 : 2 }}>
                       <ListItemIcon sx={{ minWidth: 20 }}>
                         <Box
                           sx={{
@@ -150,7 +150,7 @@ const UserGuide = ({ currentStep = 0, uploadedFile, replayConfig }) => {
                         />
                       </ListItemIcon>
                       <ListItemText 
-                        primary={detail.replace(/^  /, '')}
+                        primary={detail.replace(/^\u0020\u0020/, '')}
                         primaryTypographyProps={{ variant: 'body2' }}
                       />
                     </ListItem>
