@@ -15,6 +15,7 @@ COPY frontend/ .
 # Set environment variables for build
 ENV CI=false
 ENV GENERATE_SOURCEMAP=false
+ENV ESLINT_NO_DEV_ERRORS=true
 
 # Build the application
 RUN npm run build
