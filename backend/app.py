@@ -64,15 +64,30 @@ def create_app():
     def get_version():
         """Get application version information."""
         try:
-            # Read version from VERSION file
-            version_file = os.path.join(
-                os.path.dirname(os.path.dirname(__file__)), 'VERSION'
-            )
-            if os.path.exists(version_file):
-                with open(version_file, 'r') as f:
-                    version = f.read().strip()
+            # Try multiple possible locations for VERSION file
+            possible_paths = [
+                # From backend directory, go up one level to project root
+                os.path.join(
+                    os.path.dirname(os.path.dirname(__file__)), 'VERSION'
+                ),
+                # From current working directory
+                os.path.join(os.getcwd(), 'VERSION'),
+                # From project root (assuming we're in backend subdirectory)
+                os.path.join(os.path.dirname(os.getcwd()), 'VERSION'),
+                # Absolute path if running from project root
+                'VERSION'
+            ]
+            
+            version = '1.2.0'  # default to current version
+            
+            for version_file in possible_paths:
+                if os.path.exists(version_file):
+                    with open(version_file, 'r') as f:
+                        version = f.read().strip()
+                    logging.info(f"Found VERSION file at: {version_file}")
+                    break
             else:
-                version = '1.0.0'  # fallback version
+                logging.warning("VERSION file not found in any expected location")
             
             return jsonify({
                 'version': version,
@@ -83,7 +98,7 @@ def create_app():
         except Exception as e:
             logging.error(f"Error reading version: {e}")
             return jsonify({
-                'version': '1.0.0',
+                'version': '1.2.0',
                 'name': 'PCAP Replaya',
                 'description': 'Network Packet Replay Tool',
                 'timestamp': datetime.utcnow().isoformat()
