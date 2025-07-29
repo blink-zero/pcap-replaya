@@ -48,23 +48,9 @@ const ReplayHistory = ({ onReplayStart }) => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [hasMore, setHasMore] = useState(false);
   const itemsPerPage = 20;
 
-  useEffect(() => {
-    loadHistory();
-  }, [currentPage]);
-
-  useEffect(() => {
-    // Reset to first page when filters change
-    if (currentPage !== 1) {
-      setCurrentPage(1);
-    } else {
-      loadHistory();
-    }
-  }, [filterStatus, searchTerm]);
-
-  const loadHistory = async () => {
+  const loadHistory = React.useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -73,14 +59,24 @@ const ReplayHistory = ({ onReplayStart }) => {
       
       setHistory(response.data.history || []);
       setTotalCount(response.data.total_count || 0);
-      setHasMore(response.data.has_more || false);
     } catch (err) {
       console.error('Error loading replay history:', err);
       setError('Failed to load replay history');
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, itemsPerPage]);
+
+  useEffect(() => {
+    loadHistory();
+  }, [loadHistory]);
+
+  useEffect(() => {
+    // Reset to first page when filters change
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
+  }, [filterStatus, searchTerm, currentPage]);
 
   const handleReplayAgain = async (historyItem) => {
     try {
