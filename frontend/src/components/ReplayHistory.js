@@ -23,6 +23,8 @@ import {
   CircularProgress,
   TextField,
   MenuItem,
+  Pagination,
+  Stack,
 } from '@mui/material';
 import {
   PlayArrow as PlayIcon,
@@ -42,17 +44,36 @@ const ReplayHistory = ({ onReplayStart }) => {
   const [replayingId, setReplayingId] = useState(null);
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const itemsPerPage = 20;
 
   useEffect(() => {
     loadHistory();
-  }, []);
+  }, [currentPage]);
+
+  useEffect(() => {
+    // Reset to first page when filters change
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    } else {
+      loadHistory();
+    }
+  }, [filterStatus, searchTerm]);
 
   const loadHistory = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await apiService.getReplayHistory();
+      const offset = (currentPage - 1) * itemsPerPage;
+      const response = await apiService.getReplayHistory(itemsPerPage, offset);
+      
       setHistory(response.data.history || []);
+      setTotalCount(response.data.total_count || 0);
+      setHasMore(response.data.has_more || false);
     } catch (err) {
       console.error('Error loading replay history:', err);
       setError('Failed to load replay history');
@@ -163,7 +184,7 @@ const ReplayHistory = ({ onReplayStart }) => {
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Chip
-              label={`${filteredHistory.length} replays`}
+              label={`${totalCount} total replays`}
               size="small"
               variant="outlined"
             />
@@ -301,6 +322,25 @@ const ReplayHistory = ({ onReplayStart }) => {
               </TableBody>
             </Table>
           </TableContainer>
+        )}
+
+        {/* Pagination */}
+        {totalCount > itemsPerPage && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+            <Stack spacing={2}>
+              <Pagination
+                count={Math.ceil(totalCount / itemsPerPage)}
+                page={currentPage}
+                onChange={(event, page) => setCurrentPage(page)}
+                color="primary"
+                showFirstButton
+                showLastButton
+              />
+              <Typography variant="caption" color="text.secondary" textAlign="center">
+                Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, totalCount)} of {totalCount} replays
+              </Typography>
+            </Stack>
+          </Box>
         )}
 
         {/* Details Dialog */}

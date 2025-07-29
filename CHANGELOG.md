@@ -5,6 +5,27 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-07-29
+
+### Added
+- **Pagination for Replay History**: Added pagination support to the replay history view
+  - Backend API now supports `limit` and `offset` parameters for paginated history retrieval
+  - Frontend displays 20 replays per page with Material-UI Pagination component
+  - Shows total count and current page range information
+  - Automatic page reset when filters are applied
+  - Improved performance for large history datasets
+
+### Changed
+- **History Service**: Updated `get_history()` method to return pagination metadata
+- **API Response**: History endpoint now returns `total_count`, `has_more`, `limit`, and `offset` fields
+- **Frontend State Management**: Enhanced state management for pagination and filtering
+
+### Technical Improvements
+- Optimized database queries with pagination support
+- Reduced memory usage for large history datasets
+- Improved user experience with better navigation controls
+- Enhanced filtering and search functionality with pagination
+
 ## [1.0.0] - 2025-07-20
 
 ### Added

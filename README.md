@@ -555,6 +555,13 @@ For issues and questions:
 
 ## Version History
 
+- **v1.1.0** - Enhanced replay history with pagination
+  - Added pagination support for replay history (20 items per page)
+  - Improved performance for large history datasets
+  - Enhanced filtering and search functionality
+  - Better user experience with navigation controls
+  - Backend API optimization with limit/offset parameters
+
 - **v1.0.0** - Initial release with core PCAP replay functionality
   - File upload and analysis
   - tcpreplay integration

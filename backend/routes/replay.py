@@ -1,12 +1,7 @@
 from flask import Blueprint, request, jsonify, current_app
-import subprocess
-import threading
-import time
 import os
-import signal
 import logging
 from datetime import datetime
-from flask_socketio import emit
 
 from utils.validators import validate_replay_config
 from utils.logger import log_replay_event
@@ -64,7 +59,9 @@ def start_replay():
         # Add to history
         history_service = get_history_service()
         filename = os.path.basename(file_path)
-        file_size = os.path.getsize(file_path) if os.path.exists(file_path) else 0
+        file_size = (
+            os.path.getsize(file_path) if os.path.exists(file_path) else 0
+        )
         
         history_service.add_replay({
             'filename': filename,
@@ -142,16 +139,31 @@ def get_replay_status():
 
 @replay_bp.route('/replay/history', methods=['GET'])
 def get_replay_history():
-    """Get history of recent replays."""
+    """Get history of recent replays with pagination."""
     try:
         history_service = get_history_service()
-        limit = request.args.get('limit', 50, type=int)
-        history = history_service.get_history(limit)
+        limit = request.args.get('limit', 20, type=int)
+        offset = request.args.get('offset', 0, type=int)
+        
+        # Validate parameters
+        if limit < 1 or limit > 100:
+            limit = 20
+        if offset < 0:
+            offset = 0
+            
+        result = history_service.get_history(limit, offset)
         
         return jsonify({
-            'history': history,
-            'count': len(history),
-            'message': f'Retrieved {len(history)} replay history entries'
+            'history': result['history'],
+            'total_count': result['total_count'],
+            'limit': result['limit'],
+            'offset': result['offset'],
+            'has_more': result['has_more'],
+            'count': len(result['history']),
+            'message': (
+                f'Retrieved {len(result["history"])} of '
+                f'{result["total_count"]} replay history entries'
+            )
         }), 200
         
     except Exception as e:

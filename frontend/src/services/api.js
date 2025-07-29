@@ -83,7 +83,8 @@ export const apiService = {
   
   getReplayStatus: () => api.get('/replay/status'),
   
-  getReplayHistory: () => api.get('/replay/history'),
+  getReplayHistory: (limit = 20, offset = 0) => 
+    api.get(`/replay/history?limit=${limit}&offset=${offset}`),
   
   validateReplayConfig: (config) => api.post('/replay/validate', config),
 

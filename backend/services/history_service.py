@@ -2,8 +2,9 @@ import json
 import os
 import logging
 from datetime import datetime
-from typing import List, Dict, Optional
+from typing import Dict, Optional
 import uuid
+
 
 class ReplayHistoryService:
     """Service for managing replay history."""
@@ -19,10 +20,14 @@ class ReplayHistoryService:
             if os.path.exists(self.history_file):
                 with open(self.history_file, 'r') as f:
                     self.history = json.load(f)
-                logging.info(f"Loaded {len(self.history)} replay history entries")
+                logging.info(
+                    f"Loaded {len(self.history)} replay history entries"
+                )
             else:
                 self.history = []
-                logging.info("No history file found, starting with empty history")
+                logging.info(
+                    "No history file found, starting with empty history"
+                )
         except Exception as e:
             logging.error(f"Error loading history: {e}")
             self.history = []
@@ -86,9 +91,12 @@ class ReplayHistoryService:
                         
                         # Calculate duration
                         if entry.get('started_at'):
-                            start_time = datetime.fromisoformat(entry['started_at'])
+                            start_time = datetime.fromisoformat(
+                                entry['started_at']
+                            )
                             end_time = datetime.utcnow()
-                            entry['duration'] = (end_time - start_time).total_seconds()
+                            duration = (end_time - start_time).total_seconds()
+                            entry['duration'] = duration
                     
                     # Update additional fields
                     for key, value in kwargs.items():
@@ -96,7 +104,9 @@ class ReplayHistoryService:
                             entry[key] = value
                     
                     self.save_history()
-                    logging.info(f"Updated replay status: {replay_id} -> {status}")
+                    logging.info(
+                        f"Updated replay status: {replay_id} -> {status}"
+                    )
                     return True
             
             logging.warning(f"Replay not found in history: {replay_id}")
@@ -106,13 +116,31 @@ class ReplayHistoryService:
             logging.error(f"Error updating replay status: {e}")
             return False
     
-    def get_history(self, limit: int = 50) -> List[Dict]:
-        """Get replay history."""
+    def get_history(self, limit: int = 50, offset: int = 0) -> Dict:
+        """Get replay history with pagination."""
         try:
-            return self.history[:limit]
+            total_count = len(self.history)
+            start_idx = offset
+            end_idx = offset + limit
+            
+            paginated_history = self.history[start_idx:end_idx]
+            
+            return {
+                'history': paginated_history,
+                'total_count': total_count,
+                'limit': limit,
+                'offset': offset,
+                'has_more': end_idx < total_count
+            }
         except Exception as e:
             logging.error(f"Error getting history: {e}")
-            return []
+            return {
+                'history': [],
+                'total_count': 0,
+                'limit': limit,
+                'offset': offset,
+                'has_more': False
+            }
     
     def get_replay_by_id(self, history_id: str) -> Optional[Dict]:
         """Get a specific replay by history ID."""
@@ -137,6 +165,7 @@ class ReplayHistoryService:
 
 # Global instance
 _history_service = None
+
 
 def get_history_service() -> ReplayHistoryService:
     """Get the global history service instance."""
