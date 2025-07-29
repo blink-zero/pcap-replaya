@@ -40,6 +40,9 @@ export const apiService = {
   // Health check
   healthCheck: () => api.get('/health'),
 
+  // Get version information
+  getVersion: () => api.get('/version'),
+
   // File upload
   uploadFile: (file, onProgress) => {
     const formData = new FormData();

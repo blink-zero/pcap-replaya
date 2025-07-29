@@ -60,6 +60,35 @@ def create_app():
             'timestamp': datetime.utcnow().isoformat()
         })
     
+    @app.route('/api/version')
+    def get_version():
+        """Get application version information."""
+        try:
+            # Read version from VERSION file
+            version_file = os.path.join(
+                os.path.dirname(os.path.dirname(__file__)), 'VERSION'
+            )
+            if os.path.exists(version_file):
+                with open(version_file, 'r') as f:
+                    version = f.read().strip()
+            else:
+                version = '1.0.0'  # fallback version
+            
+            return jsonify({
+                'version': version,
+                'name': 'PCAP Replaya',
+                'description': 'Network Packet Replay Tool',
+                'timestamp': datetime.utcnow().isoformat()
+            })
+        except Exception as e:
+            logging.error(f"Error reading version: {e}")
+            return jsonify({
+                'version': '1.0.0',
+                'name': 'PCAP Replaya',
+                'description': 'Network Packet Replay Tool',
+                'timestamp': datetime.utcnow().isoformat()
+            })
+    
     @app.errorhandler(413)
     def too_large(e):
         return jsonify({'error': 'File too large. Maximum size is 1GB.'}), 413

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -25,6 +25,7 @@ import ProgressMonitor from './components/ProgressMonitor';
 import LiveLog from './components/LiveLog';
 import ReplayHistory from './components/ReplayHistory';
 import UserGuide from './components/UserGuide';
+import { apiService } from './services/api';
 
 // Create Material-UI theme
 const theme = createTheme({
@@ -76,6 +77,27 @@ function App() {
     speed_unit: 'multiplier',
   });
   const [guideOpen, setGuideOpen] = useState(false);
+  const [versionInfo, setVersionInfo] = useState(null);
+
+  // Fetch version information on component mount
+  useEffect(() => {
+    const fetchVersion = async () => {
+      try {
+        const response = await apiService.getVersion();
+        setVersionInfo(response.data);
+      } catch (error) {
+        console.error('Failed to fetch version information:', error);
+        // Set fallback version info
+        setVersionInfo({
+          version: '1.1.0',
+          name: 'PCAP Replaya',
+          description: 'Network Packet Replay Tool'
+        });
+      }
+    };
+
+    fetchVersion();
+  }, []);
 
   const handleFileUploaded = (fileData) => {
     console.log('File uploaded:', fileData);
@@ -113,6 +135,11 @@ function App() {
             <NetworkIcon sx={{ mr: 2 }} />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               PCAP Replaya
+              {versionInfo && (
+                <Typography component="span" variant="caption" sx={{ ml: 1, opacity: 0.7 }}>
+                  v{versionInfo.version}
+                </Typography>
+              )}
             </Typography>
             <Typography variant="body2" sx={{ opacity: 0.8 }}>
               Network Packet Replay Tool
@@ -171,11 +198,16 @@ function App() {
           {/* Footer */}
           <Box sx={{ mt: 6, pt: 3, borderTop: 1, borderColor: 'divider' }}>
             <Typography variant="body2" color="text.secondary" align="center">
-              PCAP Replaya - Built with React, Flask, and tcpreplay
+              {versionInfo ? `${versionInfo.name} v${versionInfo.version}` : 'PCAP Replaya'} - Built with React, Flask, and tcpreplay
             </Typography>
             <Typography variant="caption" color="text.secondary" align="center" display="block">
               Supports PCAP, PCAPNG, and CAP file formats up to 1GB
             </Typography>
+            {versionInfo && (
+              <Typography variant="caption" color="text.secondary" align="center" display="block" sx={{ mt: 0.5 }}>
+                {versionInfo.description}
+              </Typography>
+            )}
           </Box>
         </Container>
 
