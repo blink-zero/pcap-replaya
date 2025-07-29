@@ -139,11 +139,13 @@ def get_replay_status():
 
 @replay_bp.route('/replay/history', methods=['GET'])
 def get_replay_history():
-    """Get history of recent replays with pagination."""
+    """Get history of recent replays with pagination, search, and filtering."""
     try:
         history_service = get_history_service()
         limit = request.args.get('limit', 20, type=int)
         offset = request.args.get('offset', 0, type=int)
+        search = request.args.get('search', None, type=str)
+        status = request.args.get('status', None, type=str)
         
         # Validate parameters
         if limit < 1 or limit > 100:
@@ -151,7 +153,7 @@ def get_replay_history():
         if offset < 0:
             offset = 0
             
-        result = history_service.get_history(limit, offset)
+        result = history_service.get_history(limit, offset, search, status)
         
         return jsonify({
             'history': result['history'],
@@ -159,6 +161,8 @@ def get_replay_history():
             'limit': result['limit'],
             'offset': result['offset'],
             'has_more': result['has_more'],
+            'search': result.get('search'),
+            'status': result.get('status'),
             'count': len(result['history']),
             'message': (
                 f'Retrieved {len(result["history"])} of '

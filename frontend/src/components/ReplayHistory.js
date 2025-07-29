@@ -55,7 +55,12 @@ const ReplayHistory = ({ onReplayStart }) => {
       setLoading(true);
       setError(null);
       const offset = (currentPage - 1) * itemsPerPage;
-      const response = await apiService.getReplayHistory(itemsPerPage, offset);
+      const response = await apiService.getReplayHistory(
+        itemsPerPage, 
+        offset, 
+        searchTerm, 
+        filterStatus
+      );
       
       setHistory(response.data.history || []);
       setTotalCount(response.data.total_count || 0);
@@ -65,7 +70,7 @@ const ReplayHistory = ({ onReplayStart }) => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, itemsPerPage]);
+  }, [currentPage, itemsPerPage, searchTerm, filterStatus]);
 
   useEffect(() => {
     loadHistory();
@@ -147,15 +152,8 @@ const ReplayHistory = ({ onReplayStart }) => {
     return new Date(timestamp).toLocaleString();
   };
 
-  // Filter history based on status and search term
-  const filteredHistory = history.filter(item => {
-    const statusMatch = filterStatus === 'ALL' || item.status === filterStatus;
-    const searchMatch = !searchTerm || 
-      item.filename.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.config.interface.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return statusMatch && searchMatch;
-  });
+  // Use history directly since filtering is now done server-side
+  const filteredHistory = history;
 
   if (loading) {
     return (

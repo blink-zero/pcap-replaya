@@ -83,8 +83,16 @@ export const apiService = {
   
   getReplayStatus: () => api.get('/replay/status'),
   
-  getReplayHistory: (limit = 20, offset = 0) => 
-    api.get(`/replay/history?limit=${limit}&offset=${offset}`),
+  getReplayHistory: (limit = 20, offset = 0, search = '', status = 'ALL') => {
+    const params = new URLSearchParams({ limit, offset });
+    if (search && search.trim()) {
+      params.append('search', search.trim());
+    }
+    if (status && status !== 'ALL') {
+      params.append('status', status);
+    }
+    return api.get(`/replay/history?${params.toString()}`);
+  },
   
   validateReplayConfig: (config) => api.post('/replay/validate', config),
 

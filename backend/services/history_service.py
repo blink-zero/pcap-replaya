@@ -116,21 +116,47 @@ class ReplayHistoryService:
             logging.error(f"Error updating replay status: {e}")
             return False
     
-    def get_history(self, limit: int = 50, offset: int = 0) -> Dict:
-        """Get replay history with pagination."""
+    def get_history(self, limit: int = 50, offset: int = 0,
+                    search: str = None, status: str = None) -> Dict:
+        """Get replay history with pagination, search, and filtering."""
         try:
-            total_count = len(self.history)
+            # Start with all history
+            filtered_history = self.history.copy()
+            
+            # Apply search filter
+            if search and search.strip():
+                search_term = search.strip().lower()
+                filtered_history = [
+                    entry for entry in filtered_history
+                    if (search_term in entry.get('filename', '').lower() or
+                        search_term in entry.get('config', {}).get(
+                            'interface', '').lower())
+                ]
+            
+            # Apply status filter
+            if status and status.upper() != 'ALL':
+                status_filter = status.lower()
+                filtered_history = [
+                    entry for entry in filtered_history
+                    if entry.get('status', '').lower() == status_filter
+                ]
+            
+            # Get total count after filtering
+            total_count = len(filtered_history)
+            
+            # Apply pagination
             start_idx = offset
             end_idx = offset + limit
-            
-            paginated_history = self.history[start_idx:end_idx]
+            paginated_history = filtered_history[start_idx:end_idx]
             
             return {
                 'history': paginated_history,
                 'total_count': total_count,
                 'limit': limit,
                 'offset': offset,
-                'has_more': end_idx < total_count
+                'has_more': end_idx < total_count,
+                'search': search,
+                'status': status
             }
         except Exception as e:
             logging.error(f"Error getting history: {e}")
@@ -139,7 +165,9 @@ class ReplayHistoryService:
                 'total_count': 0,
                 'limit': limit,
                 'offset': offset,
-                'has_more': False
+                'has_more': False,
+                'search': search,
+                'status': status
             }
     
     def get_replay_by_id(self, history_id: str) -> Optional[Dict]:
