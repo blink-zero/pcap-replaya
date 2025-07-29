@@ -135,7 +135,13 @@ cd pcap-replaya-deploy
 curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/update.sh | sudo bash
 ```
 
-**Alternative method:**
+**Alternative method (if you encounter emoji/encoding issues):**
+```bash
+# Use the simple update script without emoji characters
+curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/update-simple.sh | sudo bash
+```
+
+**Download first method:**
 ```bash
 # Download the update script first
 curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/update.sh -o update.sh
