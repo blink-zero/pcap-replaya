@@ -5,6 +5,39 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-07-29
+
+### Added
+- **Version Information in UI**: Added version display throughout the user interface
+  - New `/api/version` endpoint that reads from VERSION file
+  - Version displayed in app bar header next to application name
+  - Complete version information shown in footer with app name and description
+  - Fallback version handling for error cases
+  - Version information fetched automatically on app startup
+
+### Fixed
+- **Search Functionality**: Restored broken search functionality in replay history
+  - Fixed search that was only working on current page after pagination implementation
+  - Moved search and filtering logic from frontend to backend for proper functionality
+  - Search now works across all history entries, not just current page
+  - Added server-side search on filename and interface fields
+  - Added status filtering (ALL, completed, running, failed, stopped)
+  - Case-insensitive search with real-time updates
+  - Proper pagination integration with search and filters
+
+### Changed
+- **History Service**: Enhanced with search and status filtering parameters
+- **API Endpoint**: Updated `/replay/history` to accept search and status query parameters
+- **Frontend Components**: Removed client-side filtering that was causing pagination issues
+- **Performance**: Server-side filtering provides better performance with large datasets
+
+### Technical Improvements
+- Server-side search and filtering before pagination for accurate results
+- Reduced data transfer with filtered results
+- Better scalability for large history datasets
+- Improved response times with efficient backend filtering
+- Enhanced user experience with comprehensive search capabilities
+
 ## [1.1.0] - 2025-07-29
 
 ### Added
