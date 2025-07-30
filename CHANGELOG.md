@@ -5,6 +5,21 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2025-07-30
+
+### Fixed
+- **Docker Version Display**: Fixed VERSION file not being found in Docker containers
+  - Added VERSION file copy to Dockerfile.backend to ensure it's available in container
+  - Updated version endpoint to prioritize Docker container path (working directory)
+  - Enhanced error logging to show all attempted paths for better debugging
+  - Improved fallback version handling for container environments
+
+### Technical Improvements
+- VERSION file now properly copied into Docker container at `/app/VERSION`
+- Version endpoint tries Docker-specific paths first for better container compatibility
+- Enhanced logging provides better visibility into version file resolution process
+- Robust fallback ensures version display even if file reading fails
+
 ## [1.2.0] - 2025-07-29
 
 ### Added

@@ -66,19 +66,19 @@ def create_app():
         try:
             # Try multiple possible locations for VERSION file
             possible_paths = [
+                # In Docker container, VERSION is copied to /app
+                'VERSION',
+                # From current working directory
+                os.path.join(os.getcwd(), 'VERSION'),
                 # From backend directory, go up one level to project root
                 os.path.join(
                     os.path.dirname(os.path.dirname(__file__)), 'VERSION'
                 ),
-                # From current working directory
-                os.path.join(os.getcwd(), 'VERSION'),
                 # From project root (assuming we're in backend subdirectory)
                 os.path.join(os.path.dirname(os.getcwd()), 'VERSION'),
-                # Absolute path if running from project root
-                'VERSION'
             ]
             
-            version = '1.2.0'  # default to current version
+            version = '1.2.1'  # default to current version
             
             for version_file in possible_paths:
                 if os.path.exists(version_file):
@@ -87,7 +87,9 @@ def create_app():
                     logging.info(f"Found VERSION file at: {version_file}")
                     break
             else:
-                logging.warning("VERSION file not found in any expected location")
+                logging.warning(
+                    f"VERSION file not found. Tried paths: {possible_paths}"
+                )
             
             return jsonify({
                 'version': version,
@@ -98,7 +100,7 @@ def create_app():
         except Exception as e:
             logging.error(f"Error reading version: {e}")
             return jsonify({
-                'version': '1.2.0',
+                'version': '1.2.1',
                 'name': 'PCAP Replaya',
                 'description': 'Network Packet Replay Tool',
                 'timestamp': datetime.utcnow().isoformat()

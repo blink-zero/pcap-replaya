@@ -24,6 +24,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy backend code
 COPY backend/ .
 
+# Copy VERSION file from project root
+COPY VERSION .
+
 # Create necessary directories
 RUN mkdir -p /tmp/pcap_uploads /var/log
 
