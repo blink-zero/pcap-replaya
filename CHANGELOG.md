@@ -14,11 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced error logging to show all attempted paths for better debugging
   - Improved fallback version handling for container environments
 
+- **Search Input Focus Issue**: Fixed clunky search behavior in replay history
+  - Added debouncing to search input to prevent excessive API calls
+  - Fixed search box losing focus after each character typed
+  - Improved user experience with smooth, continuous typing in search field
+  - Search now waits 300ms after user stops typing before triggering API call
+
 ### Technical Improvements
 - VERSION file now properly copied into Docker container at `/app/VERSION`
 - Version endpoint tries Docker-specific paths first for better container compatibility
 - Enhanced logging provides better visibility into version file resolution process
 - Robust fallback ensures version display even if file reading fails
+- Debounced search reduces server load and improves frontend responsiveness
+- Better state management prevents unnecessary component re-renders during search
 
 ## [1.2.0] - 2025-07-29
 

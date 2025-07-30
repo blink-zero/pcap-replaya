@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Card,
@@ -44,11 +44,21 @@ const ReplayHistory = ({ onReplayStart }) => {
   const [replayingId, setReplayingId] = useState(null);
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const itemsPerPage = 20;
+
+  // Debounce search term to avoid excessive API calls
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300); // 300ms delay
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   const loadHistory = React.useCallback(async () => {
     try {
@@ -58,7 +68,7 @@ const ReplayHistory = ({ onReplayStart }) => {
       const response = await apiService.getReplayHistory(
         itemsPerPage, 
         offset, 
-        searchTerm, 
+        debouncedSearchTerm, 
         filterStatus
       );
       
@@ -70,7 +80,7 @@ const ReplayHistory = ({ onReplayStart }) => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, itemsPerPage, searchTerm, filterStatus]);
+  }, [currentPage, itemsPerPage, debouncedSearchTerm, filterStatus]);
 
   useEffect(() => {
     loadHistory();
@@ -81,7 +91,7 @@ const ReplayHistory = ({ onReplayStart }) => {
     if (currentPage !== 1) {
       setCurrentPage(1);
     }
-  }, [filterStatus, searchTerm, currentPage]);
+  }, [filterStatus, debouncedSearchTerm, currentPage]);
 
   const handleReplayAgain = async (historyItem) => {
     try {
