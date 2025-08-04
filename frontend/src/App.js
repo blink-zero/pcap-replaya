@@ -21,6 +21,7 @@ import {
 
 import FileUpload from './components/FileUpload';
 import ReplayConfig from './components/ReplayConfig';
+import PacketManipulation from './components/PacketManipulation';
 import ProgressMonitor from './components/ProgressMonitor';
 import LiveLog from './components/LiveLog';
 import ReplayHistory from './components/ReplayHistory';
@@ -76,6 +77,8 @@ function App() {
     speed: 1.0,
     speed_unit: 'multiplier',
   });
+  const [manipulationRules, setManipulationRules] = useState(null);
+  const [showManipulation, setShowManipulation] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
   const [versionInfo, setVersionInfo] = useState(null);
 
@@ -126,6 +129,16 @@ function App() {
     // You could add notifications or other actions when replay starts from history
   };
 
+  const handleManipulationComplete = (rules) => {
+    console.log('Manipulation rules configured:', rules);
+    setManipulationRules(rules);
+    setShowManipulation(false);
+  };
+
+  const handleEnableManipulation = () => {
+    setShowManipulation(true);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -172,14 +185,27 @@ function App() {
                 config={replayConfig}
                 setConfig={setReplayConfig}
                 disabled={!uploadedFile}
+                onEnableManipulation={handleEnableManipulation}
+                manipulationRules={manipulationRules}
               />
             </Grid>
+
+            {/* Packet Manipulation Section */}
+            {showManipulation && uploadedFile && (
+              <Grid item xs={12}>
+                <PacketManipulation
+                  uploadedFile={uploadedFile}
+                  onManipulationComplete={handleManipulationComplete}
+                />
+              </Grid>
+            )}
 
             {/* Progress Monitor Section */}
             <Grid item xs={12}>
               <ProgressMonitor
                 uploadedFile={uploadedFile}
                 replayConfig={replayConfig}
+                manipulationRules={manipulationRules}
                 onReplayComplete={handleReplayComplete}
               />
             </Grid>

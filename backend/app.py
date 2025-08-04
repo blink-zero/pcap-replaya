@@ -9,6 +9,7 @@ from routes.upload import upload_bp
 from routes.replay import replay_bp
 from routes.system import system_bp
 from routes.logs import logs_bp, setup_log_websocket_handlers
+from routes.manipulation import manipulation_bp
 from utils.logger import setup_logger
 from services.log_service import get_log_streamer
 from config import Config
@@ -42,6 +43,7 @@ def create_app():
     app.register_blueprint(replay_bp, url_prefix='/api')
     app.register_blueprint(system_bp, url_prefix='/api')
     app.register_blueprint(logs_bp, url_prefix='/api')
+    app.register_blueprint(manipulation_bp, url_prefix='/api')
     
     # Store socketio instance in app config for access in other modules
     app.config['SOCKETIO'] = socketio

@@ -103,6 +103,21 @@ export const apiService = {
   getRecentLogs: (count = 100) => api.get(`/logs/recent?count=${count}`),
   
   getLogStats: () => api.get('/logs/stats'),
+
+  // Packet manipulation operations
+  analyzeForManipulation: (config) => api.post('/manipulation/analyze', config),
+  
+  previewManipulation: (config) => api.post('/manipulation/preview', config),
+  
+  applyManipulation: (config) => api.post('/manipulation/apply', config),
+  
+  manipulateAndReplay: (config) => api.post('/manipulation/replay', config),
+  
+  getManipulationTemplates: () => api.get('/manipulation/templates'),
+  
+  validateManipulationRules: (config) => api.post('/manipulation/validate', config),
+  
+  cleanupManipulatedFile: (manipulationId) => api.delete(`/manipulation/cleanup/${manipulationId}`),
 };
 
 // Utility functions

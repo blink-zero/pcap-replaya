@@ -5,6 +5,98 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-08-04
+
+### Added
+- **Advanced Packet Manipulation**: Comprehensive packet modification capabilities before replay
+  - **IP Address Mapping**: Replace source and destination IP addresses (IPv4 and IPv6)
+  - **MAC Address Mapping**: Modify source and destination MAC addresses
+  - **Port Mapping**: Change TCP/UDP port numbers for traffic redirection
+  - **VLAN Operations**: Add, remove, or modify VLAN tags on packets
+  - **Timestamp Shifting**: Adjust packet timestamps for time-based testing
+  - **Payload Replacement**: Search and replace patterns in packet payloads
+
+- **Packet Analysis Engine**: Intelligent PCAP analysis for manipulation opportunities
+  - Automatic detection of unique IPs, MACs, ports, and protocols in uploaded files
+  - Analysis of up to 1000 packets for performance optimization
+  - Protocol identification (IPv4, IPv6, TCP, UDP, ICMP)
+  - VLAN tag detection and analysis
+
+- **Manipulation Preview System**: Preview changes before applying them
+  - Sample packet modification preview (configurable sample size)
+  - Before/after packet comparison with detailed summaries
+  - Hexadecimal dump comparison for low-level analysis
+  - Modification detection and statistics
+
+- **Manipulation Templates**: Pre-configured manipulation scenarios
+  - IP Address Anonymization template for privacy protection
+  - Network Translation template for segment migration
+  - Port Standardization template for protocol normalization
+  - VLAN Tag Addition template for network segmentation
+  - MAC Vendor Change template for device simulation
+
+- **Advanced UI Components**: Intuitive interface for complex manipulations
+  - Accordion-based organization for different manipulation types
+  - Real-time rule validation with error feedback
+  - Interactive chip-based rule display with easy removal
+  - Template dialog for quick rule application
+  - Progress indicators for analysis and preview operations
+
+### Enhanced
+- **API Service**: Extended with comprehensive manipulation endpoints
+  - `/manipulation/analyze` - Analyze PCAP for manipulation opportunities
+  - `/manipulation/preview` - Preview packet modifications
+  - `/manipulation/apply` - Apply manipulation rules and create modified PCAP
+  - `/manipulation/replay` - Apply manipulation and start replay in one operation
+  - `/manipulation/templates` - Get predefined manipulation templates
+  - `/manipulation/validate` - Validate manipulation rules
+  - `/manipulation/cleanup` - Clean up temporary manipulation files
+
+- **Backend Architecture**: Robust packet manipulation service
+  - Streaming packet processing for memory efficiency with large files
+  - Comprehensive rule validation with detailed error messages
+  - Automatic checksum recalculation for modified packets
+  - Error handling with graceful fallback to original packets
+  - Progress tracking and statistics for manipulation operations
+
+- **Frontend Integration**: Seamless workflow integration
+  - Manipulation step integrated into main replay workflow
+  - Optional manipulation with easy enable/disable
+  - Rule persistence across preview and application
+  - Real-time feedback and validation
+  - Responsive design for complex manipulation interfaces
+
+### Technical Improvements
+- **Scapy Integration**: Advanced packet manipulation using Scapy library
+  - Layer-aware packet modification (Ethernet, IP, TCP, UDP, VLAN)
+  - Automatic protocol detection and handling
+  - Checksum recalculation for network compatibility
+  - Memory-efficient streaming processing for large files
+
+- **Performance Optimization**: Efficient handling of large PCAP files
+  - Streaming manipulation to minimize memory usage
+  - Progress logging for long-running operations
+  - Configurable analysis limits for performance tuning
+  - Batch processing with error recovery
+
+- **Security and Validation**: Comprehensive input validation
+  - IP address validation (IPv4 and IPv6)
+  - MAC address format validation
+  - Port range validation (1-65535)
+  - VLAN ID validation (1-4094)
+  - Rule structure validation with detailed error messages
+
+### Dependencies
+- **Backend**: Added advanced packet manipulation capabilities
+  - Scapy 2.5.0 (already included) - Enhanced usage for manipulation
+  - ipaddress module for IP validation
+  - re module for pattern matching and validation
+
+- **Frontend**: Enhanced UI components for manipulation
+  - Material-UI Accordion components for organized interface
+  - Enhanced form controls and validation
+  - Progress indicators and feedback systems
+
 ## [1.2.1] - 2025-07-30
 
 ### Fixed
