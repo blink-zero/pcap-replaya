@@ -253,6 +253,15 @@ npm start
 - `GET /api/replay/history` - Get replay history (last 50 entries)
 - `POST /api/replay/validate` - Validate replay configuration
 
+#### Packet Manipulation
+- `POST /api/manipulation/analyze` - Analyze PCAP for manipulation opportunities
+- `POST /api/manipulation/preview` - Preview packet modifications before applying
+- `POST /api/manipulation/apply` - Apply manipulation rules and create modified PCAP
+- `POST /api/manipulation/replay` - Apply manipulation and start replay in one operation
+- `GET /api/manipulation/templates` - Get predefined manipulation templates
+- `POST /api/manipulation/validate` - Validate manipulation rules
+- `DELETE /api/manipulation/cleanup` - Clean up temporary manipulation files
+
 #### Logging
 - `GET /api/logs/recent` - Get recent log entries
 - `GET /api/logs/stats` - Get logging statistics
