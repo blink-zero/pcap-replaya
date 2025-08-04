@@ -7,13 +7,22 @@ A comprehensive web application for replaying network packet capture (PCAP) file
 ### Core Functionality
 - **File Upload**: Drag-and-drop PCAP file upload with validation (supports .pcap, .pcapng, .cap up to 1GB)
 - **PCAP Analysis**: Automatic analysis of uploaded files showing packet count, duration, protocols, and file format using Scapy
+- **Advanced Packet Manipulation**: Comprehensive packet modification capabilities before replay
+  - **IP Address Mapping**: Replace source and destination IP addresses (IPv4 and IPv6)
+  - **MAC Address Mapping**: Modify source and destination MAC addresses
+  - **Port Mapping**: Change TCP/UDP port numbers for traffic redirection
+  - **VLAN Operations**: Add, remove, or modify VLAN tags on packets
+  - **Timestamp Shifting**: Adjust packet timestamps for time-based testing
+  - **Payload Replacement**: Search and replace patterns in packet payloads
+- **Manipulation Preview**: Preview packet modifications before applying them with before/after comparison
+- **Manipulation Templates**: Pre-configured scenarios for common manipulation tasks
 - **Interface Selection**: Dynamic detection and selection of available network interfaces using psutil
 - **Speed Control**: Flexible replay speed configuration with two modes:
   - **Multiplier**: Real-time speed multiplier (e.g., 1.0x = real-time, 2.0x = double speed)
   - **PPS**: Packets per second (up to 1,000,000 pps)
 - **Real-time Monitoring**: Live progress tracking with WebSocket updates via Flask-SocketIO
 - **Process Management**: Start, stop, and monitor replay operations with tcpreplay integration
-- **Replay History**: Persistent history of all replay operations with status tracking
+- **Replay History**: Persistent history of all replay operations with status tracking and pagination
 
 ### Technical Features
 - **Dockerized Deployment**: Complete containerization with multi-stage Docker builds
@@ -632,6 +641,28 @@ For issues and questions:
 - **psutil** - Cross-platform library for system and process monitoring
 
 ## Version History
+
+- **v1.3.0** - Advanced packet manipulation capabilities
+  - Added comprehensive packet manipulation system with IP/MAC/Port mapping
+  - Implemented VLAN operations and timestamp shifting capabilities
+  - Added packet analysis engine with protocol detection
+  - Created manipulation preview system with before/after comparison
+  - Added manipulation templates for common scenarios
+  - Integrated manipulation workflow into main UI
+  - Enhanced API with manipulation endpoints
+  - Added Scapy-based packet processing with streaming support
+
+- **v1.2.1** - Docker version display and search fixes
+  - Fixed VERSION file not being found in Docker containers
+  - Fixed search input focus issue in replay history
+  - Enhanced error logging and fallback version handling
+  - Added debouncing to search input for better performance
+
+- **v1.2.0** - Version information and search functionality
+  - Added version information display throughout UI
+  - Restored broken search functionality in replay history
+  - Enhanced history service with search and status filtering
+  - Improved performance with server-side filtering
 
 - **v1.1.0** - Enhanced replay history with pagination
   - Added pagination support for replay history (20 items per page)
