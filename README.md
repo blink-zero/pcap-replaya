@@ -133,35 +133,8 @@ sudo docker-compose up --build
 
 ## Updating Your Deployment
 
-### Quick Update (Recommended)
-If you deployed using the quick deploy script, updating to the latest version is simple:
-
-```bash
-# Navigate to your deployment directory
-cd pcap-replaya-deploy
-
-# Download and run the update script
-curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/update.sh | sudo bash
-```
-
-**Alternative method (if you encounter emoji/encoding issues):**
-```bash
-# Use the simple update script without emoji characters
-curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/update-simple.sh | sudo bash
-```
-
-**Download first method:**
-```bash
-# Download the update script first
-curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/update.sh -o update.sh
-chmod +x update.sh
-
-# Run the update
-sudo ./update.sh
-```
-
 ### Manual Update Process
-If you prefer to update manually:
+To update to the latest version:
 
 ```bash
 # Navigate to your deployment directory
@@ -181,18 +154,12 @@ sudo docker-compose ps
 ```
 
 ### Update Features
-The update process will:
-- ✅ Automatically detect your registry (Docker Hub or GitHub Container Registry)
+The manual update process will:
 - ✅ Pull the latest Docker images
 - ✅ Preserve your existing configuration and data
 - ✅ Maintain your `.env` file and settings
 - ✅ Keep your replay history and uploaded files
 - ✅ Restart services with zero configuration changes needed
-
-### Version Information
-- **Current Version**: v1.1.0 (with pagination support)
-- **Previous Version**: v1.0.4
-- **Update Benefits**: Enhanced replay history with pagination, improved performance for large datasets
 
 ### Troubleshooting Updates
 If you encounter issues during update:
