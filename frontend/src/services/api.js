@@ -70,6 +70,18 @@ export const apiService = {
   // Clean up uploaded file
   cleanupFile: (fileId) => api.delete(`/upload/cleanup/${fileId}`),
 
+  // Download PCAP file
+  downloadFile: (fileId) => {
+    const url = `${API_BASE_URL}/upload/download/${fileId}`;
+    // Create a temporary link and trigger download
+    const link = document.createElement('a');
+    link.href = url;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  },
+
   // Get network interfaces
   getInterfaces: () => api.get('/interfaces'),
 

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, send_file
 import os
 import uuid
 from datetime import datetime
@@ -151,3 +151,38 @@ def cleanup_file(file_id):
         
     except Exception as e:
         return jsonify({'error': f'Cleanup failed: {str(e)}'}), 500
+
+
+@upload_bp.route('/upload/download/<file_id>', methods=['GET'])
+def download_file(file_id):
+    """Download PCAP file by file ID."""
+    try:
+        upload_folder = current_app.config['UPLOAD_FOLDER']
+        
+        # Find file with this ID
+        for filename in os.listdir(upload_folder):
+            if filename.startswith(f"{file_id}_"):
+                file_path = os.path.join(upload_folder, filename)
+                
+                # Extract original filename (remove UUID prefix)
+                original_filename = filename[37:]  # Remove UUID + underscore
+                
+                # Log download event
+                log_upload_event(
+                    filename=original_filename,
+                    file_size=os.path.getsize(file_path),
+                    status='downloaded',
+                    file_id=file_id
+                )
+                
+                return send_file(
+                    file_path,
+                    as_attachment=True,
+                    download_name=original_filename,
+                    mimetype='application/octet-stream'
+                )
+        
+        return jsonify({'error': 'File not found'}), 404
+        
+    except Exception as e:
+        return jsonify({'error': f'Download failed: {str(e)}'}), 500

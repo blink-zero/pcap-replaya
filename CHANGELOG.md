@@ -5,6 +5,31 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.8] - 2025-08-08
+
+### Added
+- **PCAP Download Feature**: Added ability to download previously replayed PCAP files from history
+  - New download button in replay history actions column
+  - Backend endpoint `/upload/download/<file_id>` for secure file downloads
+  - Downloads preserve original filename and use proper MIME type
+  - Download events are logged for audit purposes
+  - Error handling for missing or unavailable files
+  - Seamless integration with existing history interface
+
+### Enhanced
+- **Replay History Interface**: Improved user experience with download functionality
+  - Added download icon button next to view details and replay actions
+  - Tooltip guidance for download feature
+  - Error messages when files are no longer available
+  - Maintains existing pagination and filtering capabilities
+
+### Technical Improvements
+- Enhanced upload route with file download endpoint
+- Improved API service with download functionality
+- Better file management and availability checking
+- Comprehensive error handling for download operations
+- Logging integration for download tracking
+
 ## [1.3.7] - 2025-08-08
 
 ### Fixed

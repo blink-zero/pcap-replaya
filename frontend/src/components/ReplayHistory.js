@@ -31,6 +31,7 @@ import {
   Refresh as RefreshIcon,
   Info as InfoIcon,
   FilterList as FilterIcon,
+  Download as DownloadIcon,
 } from '@mui/icons-material';
 import { apiService, formatFileSize, formatDuration, formatSpeed } from '../services/api';
 
@@ -142,6 +143,15 @@ const ReplayHistory = ({ onReplayStart }) => {
   const confirmReplay = (historyItem) => {
     setSelectedReplay(historyItem);
     setConfirmReplayOpen(true);
+  };
+
+  const handleDownload = async (historyItem) => {
+    try {
+      await apiService.downloadFile(historyItem.file_id);
+    } catch (err) {
+      console.error('Error downloading file:', err);
+      setError('Failed to download file. The file may no longer be available.');
+    }
   };
 
   const getStatusColor = (status) => {
@@ -304,6 +314,15 @@ const ReplayHistory = ({ onReplayStart }) => {
                             onClick={() => showDetails(item)}
                           >
                             <InfoIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Download PCAP file">
+                          <IconButton
+                            size="small"
+                            onClick={() => handleDownload(item)}
+                            color="secondary"
+                          >
+                            <DownloadIcon />
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Replay again">
