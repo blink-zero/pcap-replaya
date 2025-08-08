@@ -17,6 +17,7 @@ import {
   NetworkCheck as NetworkIcon,
   Help as HelpIcon,
   Close as CloseIcon,
+  GitHub as GitHubIcon,
 } from '@mui/icons-material';
 
 import FileUpload from './components/FileUpload';
@@ -145,7 +146,16 @@ function App() {
                 </Typography>
               )}
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+            <IconButton
+              color="inherit"
+              href="https://github.com/blink-zero/pcap-replaya"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ ml: 1 }}
+            >
+              <GitHubIcon />
+            </IconButton>
+            <Typography variant="body2" sx={{ opacity: 0.8, ml: 1 }}>
               Network Packet Replay Tool
             </Typography>
           </Toolbar>
@@ -154,10 +164,6 @@ function App() {
         <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
           <Typography variant="h4" gutterBottom align="center" sx={{ mb: 4 }}>
             PCAP Replay Dashboard
-          </Typography>
-          
-          <Typography variant="body1" align="center" color="text.secondary" sx={{ mb: 4 }}>
-            Upload PCAP files, configure replay settings, and monitor real-time progress
           </Typography>
 
           <Grid container spacing={4}>

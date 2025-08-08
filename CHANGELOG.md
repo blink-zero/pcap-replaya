@@ -5,6 +5,27 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.11] - 2025-08-08
+
+### Added
+- **GitHub Link in UI**: Added GitHub repository link icon in the app bar
+  - Clickable GitHub icon in the top navigation bar
+  - Opens repository in new tab for easy access to source code
+  - Positioned next to the "Network Packet Replay Tool" text
+
+### Improved
+- **Cleaner UI**: Removed cluttered description text from main dashboard
+  - Removed "Upload PCAP files, configure replay settings, and monitor real-time progress" text
+  - Cleaner, less cluttered main dashboard appearance
+  - More professional and streamlined user interface
+  - Better focus on the actual functionality rather than descriptive text
+
+### Enhanced
+- **User Experience**: Simplified main interface with direct access to source code
+  - Easy access to GitHub repository for users and developers
+  - Reduced visual noise in the main dashboard
+  - More professional appearance with cleaner layout
+
 ## [1.3.10] - 2025-08-08
 
 ### Fixed
