@@ -4,9 +4,7 @@ import time
 import uuid
 import logging
 import os
-import signal
 from datetime import datetime
-from flask_socketio import emit
 
 
 class ReplayManager:
@@ -225,6 +223,11 @@ class ReplayManager:
                 if continuous and self.replay_stats['loop_count'] > 1:
                     logging.info(f"Starting loop #{self.replay_stats['loop_count']} for continuous replay {replay_id}")
                 
+                # Reset progress for each loop
+                self.replay_stats['progress_percent'] = 0
+                self.replay_stats['packets_sent'] = 0
+                self.replay_stats['bytes_sent'] = 0
+                
                 # Start tcpreplay process
                 self.current_process = subprocess.Popen(
                     cmd,
@@ -237,65 +240,113 @@ class ReplayManager:
                 start_time = time.time()
                 last_progress_emit = 0
                 
-                # Monitor output for progress
-                for line in iter(self.current_process.stdout.readline, ''):
-                    if not self.is_replay_running:
+                try:
+                    # Monitor the process until it completes
+                    while self.current_process.poll() is None and self.is_replay_running:
+                        # Check for output with timeout
+                        try:
+                            # Read available output without blocking indefinitely
+                            import select
+                            import sys
+                            
+                            if sys.platform != 'win32':
+                                # Use select on Unix-like systems
+                                ready, _, _ = select.select([self.current_process.stdout], [], [], 0.5)
+                                if ready:
+                                    line = self.current_process.stdout.readline()
+                                    if line:
+                                        line = line.strip()
+                                        if line:
+                                            # Only log important lines
+                                            if 'Actual:' in line or 'Error' in line or 'Failed' in line:
+                                                logging.info(f"tcpreplay output: {line}")
+                                            
+                                            # Parse tcpreplay output for progress information
+                                            self._parse_tcpreplay_output(line, start_time)
+                            else:
+                                # On Windows, use a simpler approach
+                                time.sleep(0.1)
+                            
+                            # Emit progress update periodically
+                            current_time = time.time()
+                            if self.socketio and (current_time - last_progress_emit) >= 2:
+                                progress_data = {
+                                    'replay_id': replay_id,
+                                    'progress': self.replay_stats['progress_percent'],
+                                    'packets_sent': self.replay_stats['packets_sent'],
+                                    'bytes_sent': self.replay_stats['bytes_sent'],
+                                    'elapsed_time': self.replay_stats['elapsed_time'],
+                                    'loop_count': self.replay_stats['loop_count']
+                                }
+                                if continuous:
+                                    progress_data['continuous'] = True
+                                self.socketio.emit('replay_progress', progress_data)
+                                last_progress_emit = current_time
+                                
+                        except Exception as e:
+                            logging.debug(f"Error reading process output: {e}")
+                            time.sleep(0.1)
+                    
+                    # Wait for process to complete and get final output
+                    if self.current_process.poll() is None:
+                        # Process is still running, terminate it
+                        self.current_process.terminate()
+                        try:
+                            stdout, stderr = self.current_process.communicate(timeout=5)
+                        except subprocess.TimeoutExpired:
+                            self.current_process.kill()
+                            stdout, stderr = self.current_process.communicate()
+                    else:
+                        # Process completed normally
+                        stdout, stderr = self.current_process.communicate()
+                    
+                    return_code = self.current_process.returncode
+                    
+                    # Process any remaining output
+                    if stdout:
+                        for line in stdout.strip().split('\n'):
+                            if line.strip():
+                                logging.info(f"tcpreplay final output: {line.strip()}")
+                                self._parse_tcpreplay_output(line.strip(), start_time)
+                    
+                    # Check if replay failed
+                    if return_code != 0 and self.is_replay_running:
+                        error_msg = f"tcpreplay exited with code {return_code}"
+                        if stderr:
+                            error_msg += f": {stderr.strip()}"
+                        self.replay_stats['error'] = error_msg
+                        logging.error(f"tcpreplay error: {error_msg}")
                         break
                     
-                    line = line.strip()
-                    if line:
-                        # Only log important lines, not every output line
-                        if 'Actual:' in line or 'Error' in line or 'Failed' in line:
-                            logging.info(f"tcpreplay output: {line}")
-                        
-                        # Parse tcpreplay output for progress information
-                        self._parse_tcpreplay_output(line, start_time)
-                        
-                        # Emit progress update only every 2 seconds to reduce overhead
-                        current_time = time.time()
-                        if self.socketio and (current_time - last_progress_emit) >= 2:
-                            progress_data = {
-                                'replay_id': replay_id,
-                                'progress': self.replay_stats['progress_percent'],
-                                'packets_sent': self.replay_stats['packets_sent'],
-                                'bytes_sent': self.replay_stats['bytes_sent'],
-                                'elapsed_time': self.replay_stats['elapsed_time'],
-                                'loop_count': self.replay_stats['loop_count']
-                            }
-                            if continuous:
-                                progress_data['continuous'] = True
-                            self.socketio.emit('replay_progress', progress_data)
-                            last_progress_emit = current_time
-                
-                # Wait for process to complete and capture any error output
-                stdout, stderr = self.current_process.communicate()
-                return_code = self.current_process.returncode
-                
-                # Process any remaining output
-                if stdout:
-                    for line in stdout.strip().split('\n'):
-                        if line.strip():
-                            logging.info(f"tcpreplay final output: {line.strip()}")
-                            self._parse_tcpreplay_output(line.strip(), start_time)
-                
-                # Check if replay failed
-                if return_code != 0:
-                    error_msg = f"tcpreplay exited with code {return_code}"
-                    if stderr:
-                        error_msg += f": {stderr.strip()}"
-                    self.replay_stats['error'] = error_msg
-                    logging.error(f"tcpreplay error: {error_msg}")
+                    # Log completion of this iteration
+                    logging.info(f"Completed loop #{self.replay_stats['loop_count']} for replay {replay_id}")
+                    
+                except Exception as e:
+                    logging.error(f"Error during process monitoring: {e}")
                     break
+                finally:
+                    # Clean up process
+                    if self.current_process:
+                        try:
+                            if self.current_process.poll() is None:
+                                self.current_process.terminate()
+                                self.current_process.wait(timeout=2)
+                        except Exception:
+                            pass
+                        self.current_process = None
                 
                 # If not continuous mode, break after one iteration
                 if not continuous:
                     break
                 
-                # For continuous mode, reset progress for next loop
+                # For continuous mode, add delay between loops and check if we should continue
                 if continuous and self.is_replay_running:
-                    self.replay_stats['progress_percent'] = 0
-                    # Small delay between loops to prevent overwhelming the system
-                    time.sleep(0.1)
+                    logging.info(f"Waiting 2 seconds before starting loop #{self.replay_stats['loop_count'] + 1}")
+                    # Use smaller sleep intervals to allow for responsive stopping
+                    for _ in range(20):  # 20 * 0.1 = 2 seconds total
+                        if not self.is_replay_running:
+                            break
+                        time.sleep(0.1)
             
             # Update final status
             with self.lock:
