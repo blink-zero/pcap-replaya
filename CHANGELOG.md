@@ -5,6 +5,24 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2025-08-08
+
+### Fixed
+- **Continuous Replay Process Communication**: Fixed critical issue preventing continuous replay from working
+  - Fixed blocking process communication logic that prevented proper looping
+  - Improved process monitoring with proper select() usage on Unix systems
+  - Added proper process cleanup between loops to prevent resource leaks
+  - Increased delay between loops from 0.1s to 2s for better system stability
+  - Enhanced error handling and logging for continuous replay debugging
+  - Fixed bare except clause and other code quality issues
+
+### Technical Improvements
+- Non-blocking process output reading with timeout handling
+- Platform-specific handling for Windows vs Unix systems
+- Responsive stopping mechanism with smaller sleep intervals
+- Better process termination with timeout and fallback to kill
+- Enhanced logging for debugging continuous replay behavior
+
 ## [1.3.0] - 2025-08-08
 
 ### Added
