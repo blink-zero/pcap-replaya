@@ -2,7 +2,7 @@
 
 A modern web application for replaying network packet capture (PCAP) files using tcpreplay. Built with React frontend, Flask backend, and fully containerized with Docker.
 
-![Version](https://img.shields.io/badge/version-1.3.8-blue.svg)
+![Version](https://img.shields.io/badge/version-1.3.9-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
 
@@ -369,11 +369,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🏷️ Version History
 
+- **v1.3.9** - Complete README overhaul and comprehensive API documentation
 - **v1.3.8** - Added PCAP download feature to replay history
 - **v1.3.7** - Fixed continuous mode display in history details
 - **v1.3.6** - Fixed speed unit display (PPS showing correctly)
+- **v1.3.5** - Fixed critical status override bug (stopped vs failed)
+- **v1.3.4** - Improved status handling for manually stopped replays
+- **v1.3.3** - Fixed critical validator bug for continuous parameter
+- **v1.3.2** - Fixed continuous replay frontend logic
+- **v1.3.1** - Fixed continuous replay process communication
 - **v1.3.0** - Added continuous replay feature
+- **v1.2.1** - Fixed Docker version display and search input focus
 - **v1.2.0** - Enhanced replay history with pagination and search
+- **v1.1.0** - Added pagination for replay history
 - **v1.0.0** - Initial release
 
 ## 🙏 Acknowledgments
