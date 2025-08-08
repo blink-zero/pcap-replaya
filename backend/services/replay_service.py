@@ -309,14 +309,18 @@ class ReplayManager:
                                 logging.info(f"tcpreplay final output: {line.strip()}")
                                 self._parse_tcpreplay_output(line.strip(), start_time)
                     
-                    # Check if replay failed
+                    # Check if replay failed (only if we're still supposed to be running)
                     if return_code != 0 and self.is_replay_running:
+                        # Only treat as error if we didn't manually stop it
                         error_msg = f"tcpreplay exited with code {return_code}"
                         if stderr:
                             error_msg += f": {stderr.strip()}"
                         self.replay_stats['error'] = error_msg
                         logging.error(f"tcpreplay error: {error_msg}")
                         break
+                    elif return_code != 0 and not self.is_replay_running:
+                        # Process was terminated due to manual stop - this is expected
+                        logging.info(f"tcpreplay exited with code {return_code} after manual stop - this is expected")
                     
                     # Log completion of this iteration
                     logging.info(f"Completed loop #{self.replay_stats['loop_count']} for replay {replay_id}")

@@ -5,6 +5,20 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.4] - 2025-08-08
+
+### Fixed
+- **Replay Status Display**: Improved status handling for manually stopped replays
+  - Enhanced logic to distinguish between failed replays and manually stopped replays
+  - When a user manually stops a replay, it now correctly shows "stopped" instead of "failed" in history
+  - Added better logging to differentiate between expected termination (manual stop) vs actual errors
+  - Improved race condition handling between manual stop and process termination
+
+### Technical Improvements
+- Better process termination handling with clearer status determination
+- Enhanced logging for debugging replay termination scenarios
+- More robust status logic that properly handles manual stop vs error conditions
+
 ## [1.3.3] - 2025-08-08
 
 ### Fixed
