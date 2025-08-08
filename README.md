@@ -1,212 +1,272 @@
 # PCAP Replaya
 
-A comprehensive web application for replaying network packet capture (PCAP) files using tcpreplay. Built with React frontend, Flask backend, and fully containerized with Docker.
+A modern web application for replaying network packet capture (PCAP) files using tcpreplay. Built with React frontend, Flask backend, and fully containerized with Docker.
 
-## Features
+![Version](https://img.shields.io/badge/version-1.3.8-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
 
-### Core Functionality
-- **File Upload**: Drag-and-drop PCAP file upload with validation (supports .pcap, .pcapng, .cap up to 1GB)
-- **PCAP Analysis**: Automatic analysis of uploaded files showing packet count, duration, protocols, and file format using Scapy
-- **Interface Selection**: Dynamic detection and selection of available network interfaces using psutil
-- **Speed Control**: Flexible replay speed configuration with two modes:
-  - **Multiplier**: Real-time speed multiplier (e.g., 1.0x = real-time, 2.0x = double speed)
-  - **PPS**: Packets per second (up to 1,000,000 pps)
-- **Continuous Replay**: Option to replay PCAP files continuously until manually stopped
-  - **Loop Count Tracking**: Real-time display of current loop iteration
-  - **Automatic Restart**: Seamless looping with small delays between iterations
-  - **Manual Control**: Stop continuous replay at any time
-- **Real-time Monitoring**: Live progress tracking with WebSocket updates via Flask-SocketIO
-- **Process Management**: Start, stop, and monitor replay operations with tcpreplay integration
-- **Replay History**: Persistent history of all replay operations with status tracking
+## ✨ Features
 
-### Technical Features
-- **Dockerized Deployment**: Complete containerization with multi-stage Docker builds
-- **tcpreplay Integration**: Built-in tcpreplay installation and management with process monitoring
-- **Security**: Input validation, file type verification using magic bytes, and secure file handling
-- **Responsive UI**: Modern Material-UI interface with drag-and-drop file upload
-- **Error Handling**: Comprehensive error handling and user feedback with timeout protection
-- **Structured Logging**: Detailed logging for debugging and monitoring with log streaming
-- **Performance Optimization**: Large file handling with analysis limits and memory-efficient processing
+- **📁 File Upload**: Drag-and-drop PCAP upload with validation (.pcap, .pcapng, .cap up to 1GB)
+- **📊 PCAP Analysis**: Automatic analysis showing packet count, duration, and protocols
+- **🔄 Flexible Replay**: Speed control with multiplier or PPS modes
+- **🔁 Continuous Replay**: Loop PCAP files continuously until manually stopped
+- **📈 Real-time Monitoring**: Live progress tracking with WebSocket updates
+- **📋 Replay History**: Persistent history with pagination, search, and filtering
+- **⬇️ Download Feature**: Download previously replayed PCAP files
+- **🖥️ Interface Selection**: Dynamic network interface detection
+- **📱 Responsive UI**: Modern Material-UI interface
 
-## Architecture
+## 🚀 Quick Start
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   React Frontend│    │  Flask Backend  │    │   tcpreplay     │
-│                 │    │                 │    │                 │
-│ • File Upload   │◄──►│ • API Endpoints │◄──►│ • Packet Replay │
-│ • Config UI     │    │ • File Handling │    │ • Progress Mon. │
-│ • Progress Mon. │    │ • WebSocket     │    │ • Speed Control │
-│ • Real-time UI  │    │ • Process Mgmt  │    │ • Interface Mgmt│
-│ • History View  │    │ • History Svc   │    │                 │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         └───────────────────────┼───────────────────────┘
-                                 │
-                    ┌─────────────────┐
-                    │     Docker      │
-                    │   Environment   │
-                    │                 │
-                    │ • Nginx Proxy   │
-                    │ • Host Network  │
-                    │ • Privileged    │
-                    │ • Volume Mounts │
-                    └─────────────────┘
-```
-
-## Technology Stack
-
-### Backend
-- **Flask 2.3.3** - Web framework
-- **Flask-SocketIO 5.3.6** - Real-time WebSocket communication
-- **Flask-CORS 4.0.0** - Cross-origin resource sharing
-- **Scapy 2.5.0** - PCAP file analysis and packet manipulation
-- **psutil 5.9.5** - System and network interface monitoring
-- **python-magic 0.4.27** - File type detection using magic bytes
-- **tcpreplay** - Network packet replay utility
-
-### Frontend
-- **React 18.2.0** - Frontend framework
-- **Material-UI 5.14.1** - UI component library
-- **axios 1.4.0** - HTTP client for API communication
-- **socket.io-client 4.7.2** - WebSocket client
-- **react-dropzone 14.2.3** - Drag-and-drop file upload
-
-### Infrastructure
-- **Docker & Docker Compose** - Containerization and orchestration
-- **Nginx** - Reverse proxy and static file serving
-- **Python 3.11** - Backend runtime
-- **Node.js 18** - Frontend build environment
-
-## Quick Start
-
-### Prerequisites
-- Docker and Docker Compose
-- Linux environment (for network interface access)
-- Root/sudo privileges (required for tcpreplay network access)
-
-### Option 1: Quick Deploy (Recommended)
-**One-command deployment using pre-built Docker images:**
+### One-Command Deployment (Recommended)
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/quick-deploy.sh | sudo bash
 ```
 
-This will:
-- Download the production configuration
-- Pull pre-built images from Docker Hub
-- Generate secure environment variables
-- Start the application automatically
-
-### Option 2: Production Deployment
-**Using pre-built Docker images:**
+### Manual Deployment
 
 ```bash
-# Download production docker-compose file
+# Download production configuration
 curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/docker-compose.prod.yml -o docker-compose.yml
 
-# Start with pre-built images
+# Start the application
 sudo docker-compose up -d
-```
-
-### Option 3: Development Build
-**Build from source:**
-
-```bash
-# Clone the repository
-git clone https://github.com/blink-zero/pcap-replaya.git
-cd pcap-replaya
-
-# Build and start
-sudo docker-compose up --build
 ```
 
 ### Access the Application
-- Frontend: http://localhost
-- Backend API: http://localhost:5000/api
-- Works with any IP address (localhost, 10.150.0.140, domain names)
+- **Frontend**: http://localhost
+- **Backend API**: http://localhost:5000/api
 
-## Updating Your Deployment
+## 📋 Prerequisites
 
-### Quick Update (Recommended)
-If you deployed using the quick deploy script, updating to the latest version is simple:
+- Docker and Docker Compose
+- Linux environment (for network interface access)
+- Root/sudo privileges (required for tcpreplay network access)
 
+## 🔄 Updating
+
+### Quick Update
 ```bash
-# Navigate to your deployment directory
 cd pcap-replaya-deploy
-
-# Download and run the update script
 curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/update.sh | sudo bash
 ```
 
-**Alternative method (if you encounter emoji/encoding issues):**
+### Manual Update
 ```bash
-# Use the simple update script without emoji characters
-curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/update-simple.sh | sudo bash
-```
-
-**Download first method:**
-```bash
-# Download the update script first
-curl -sSL https://raw.githubusercontent.com/blink-zero/pcap-replaya/main/update.sh -o update.sh
-chmod +x update.sh
-
-# Run the update
-sudo ./update.sh
-```
-
-### Manual Update Process
-If you prefer to update manually:
-
-```bash
-# Navigate to your deployment directory
-cd pcap-replaya-deploy
-
-# Pull latest images
 sudo docker-compose pull
-
-# Stop current containers
 sudo docker-compose down
-
-# Start with new images
 sudo docker-compose up -d
-
-# Check status
-sudo docker-compose ps
 ```
 
-### Update Features
-The update process will:
-- ✅ Automatically detect your registry (Docker Hub or GitHub Container Registry)
-- ✅ Pull the latest Docker images
-- ✅ Preserve your existing configuration and data
-- ✅ Maintain your `.env` file and settings
-- ✅ Keep your replay history and uploaded files
-- ✅ Restart services with zero configuration changes needed
+## 📖 Usage
 
-### Version Information
-- **Current Version**: v1.3.0 (with continuous replay feature)
-- **Previous Version**: v1.2.1
-- **Update Benefits**: Continuous replay capability, enhanced pagination, improved performance for large datasets
+### 1. Upload PCAP File
+- Drag and drop or click to select a PCAP file
+- Supported formats: `.pcap`, `.pcapng`, `.cap`
+- Maximum size: 1GB
 
-### Troubleshooting Updates
-If you encounter issues during update:
+### 2. Configure Replay
+- **Interface**: Select network interface
+- **Speed**: Choose multiplier (0.1x-100x) or PPS (1-1,000,000)
+- **Continuous**: Enable for continuous looping
+- **Advanced**: Loop count and preload options
 
+### 3. Monitor Progress
+- Real-time progress updates
+- Live packet and data transmission stats
+- Stop replay at any time
+
+### 4. View History
+- Browse all previous replays
+- Search and filter by status
+- Download original PCAP files
+- Replay with same configuration
+
+## 🔌 API Documentation
+
+### Base URL
+```
+http://localhost:5000/api
+```
+
+### Authentication
+No authentication required for local deployment.
+
+### Endpoints
+
+#### Health & System
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/health` | Application health status |
+| `GET` | `/version` | Application version information |
+| `GET` | `/interfaces` | List available network interfaces |
+| `GET` | `/system/status` | System resource status (CPU, memory, disk) |
+| `GET` | `/system/capabilities` | System capabilities and tcpreplay features |
+
+#### File Management
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/upload` | Upload PCAP file (multipart/form-data) |
+| `GET` | `/upload/status/{file_id}` | Get upload status |
+| `GET` | `/upload/download/{file_id}` | Download PCAP file |
+| `DELETE` | `/upload/cleanup/{file_id}` | Clean up uploaded file |
+
+#### Replay Control
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/replay/start` | Start PCAP replay |
+| `POST` | `/replay/stop` | Stop current replay |
+| `GET` | `/replay/status` | Get current replay status |
+| `GET` | `/replay/history` | Get replay history (paginated) |
+| `POST` | `/replay/validate` | Validate replay configuration |
+
+#### Packet Manipulation
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/manipulation/modify` | Modify packets in PCAP |
+| `GET` | `/manipulation/templates` | Get modification templates |
+
+#### Logging
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/logs/recent` | Get recent log entries |
+| `GET` | `/logs/stats` | Get logging statistics |
+
+### Request Examples
+
+#### Start Replay
 ```bash
-# Check logs
-sudo docker-compose logs
-
-# Restart services
-sudo docker-compose restart
-
-# Full reset (preserves data)
-sudo docker-compose down
-sudo docker-compose up -d
+curl -X POST http://localhost:5000/api/replay/start \
+  -H "Content-Type: application/json" \
+  -d '{
+    "file_id": "uuid-of-uploaded-file",
+    "interface": "eth0",
+    "speed": 2.0,
+    "speed_unit": "multiplier",
+    "continuous": false,
+    "loop": 1,
+    "preload_pcap": false
+  }'
 ```
 
-### Development Setup
+#### Upload File
+```bash
+curl -X POST http://localhost:5000/api/upload \
+  -F "file=@example.pcap"
+```
 
-#### Backend Development
+#### Get Replay History
+```bash
+curl "http://localhost:5000/api/replay/history?limit=20&offset=0&search=test&status=completed"
+```
+
+### Response Examples
+
+#### Replay Status
+```json
+{
+  "replay_id": "uuid",
+  "status": "running",
+  "progress_percent": 45.2,
+  "packets_sent": 1250,
+  "bytes_sent": 892400,
+  "elapsed_time": 12.5,
+  "packets_per_second": 100.0,
+  "continuous": false,
+  "loop_count": 1
+}
+```
+
+#### Upload Response
+```json
+{
+  "message": "File uploaded successfully",
+  "file_id": "uuid",
+  "filename": "example.pcap",
+  "file_size": 1048576,
+  "pcap_info": {
+    "packet_count": 1000,
+    "duration": 30.5,
+    "file_format": "pcap",
+    "protocols": ["IP", "TCP", "UDP"]
+  }
+}
+```
+
+#### History Response
+```json
+{
+  "history": [
+    {
+      "id": "uuid",
+      "filename": "example.pcap",
+      "file_id": "file-uuid",
+      "status": "completed",
+      "started_at": "2025-08-08T15:30:00Z",
+      "duration": 25.3,
+      "packets_sent": 1000,
+      "config": {
+        "interface": "eth0",
+        "speed": 2.0,
+        "speed_unit": "multiplier",
+        "continuous": false
+      }
+    }
+  ],
+  "total_count": 50,
+  "limit": 20,
+  "offset": 0,
+  "has_more": true
+}
+```
+
+### WebSocket Events
+
+Connect to: `ws://localhost:5000`
+
+| Event | Description | Data |
+|-------|-------------|------|
+| `replay_status` | Replay status updates | `{status, replay_id, message}` |
+| `replay_progress` | Real-time progress | `{progress_percent, packets_sent, ...}` |
+| `log_stream` | Live log streaming | `{level, message, timestamp}` |
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `FLASK_ENV` | Flask environment | `production` |
+| `UPLOAD_FOLDER` | Upload directory | `/tmp/pcap_uploads` |
+| `LOG_LEVEL` | Logging level | `INFO` |
+| `SECRET_KEY` | Flask secret key | Auto-generated |
+| `MAX_ANALYSIS_PACKETS` | Max packets to analyze | `1000000` |
+
+### Docker Configuration
+
+The application uses host networking and privileged containers for network interface access.
+
+## 🏗️ Architecture
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   React Frontend│◄──►│  Flask Backend  │◄──►│   tcpreplay     │
+│                 │    │                 │    │                 │
+│ • File Upload   │    │ • API Endpoints │    │ • Packet Replay │
+│ • Config UI     │    │ • File Handling │    │ • Speed Control │
+│ • Progress Mon. │    │ • WebSocket     │    │ • Interface Mgmt│
+│ • History View  │    │ • Process Mgmt  │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+## 🛠️ Development
+
+### Local Development
+
+#### Backend
 ```bash
 cd backend
 python -m venv venv
@@ -215,440 +275,111 @@ pip install -r requirements.txt
 python app.py
 ```
 
-#### Frontend Development
+#### Frontend
 ```bash
 cd frontend
 npm install
 npm start
 ```
 
-## Usage
-
-### 1. Upload PCAP File
-- Drag and drop a PCAP file onto the upload area or click to select
-- Supported formats: .pcap, .pcapng, .cap
-- Maximum file size: 1GB
-- The system will automatically analyze the file and display:
-  - File format and size
-  - Packet count and duration (limited to 100,000 packets for performance)
-  - Detected protocols (IP, IPv6, TCP, UDP, ICMP)
-  - Analysis warnings for large files
-
-### 2. Configure Replay Settings
-- **Network Interface**: Select from dynamically detected network interfaces
-- **Speed Control**: Choose between:
-  - **Multiplier**: Speed multiplier (e.g., 1.0x = real-time, 2.0x = double speed, max 100x)
-  - **PPS**: Packets per second (max 1,000,000 pps)
-
-### 3. Start Replay
-- Click "Start Replay" to begin packet replay using tcpreplay
-- Monitor real-time progress including:
-  - Progress percentage
-  - Packets sent
-  - Data transmitted
-  - Elapsed time
-  - Packets per second rate
-- Use "Stop" button to halt replay at any time
-- View replay history with status and statistics
-
-### 4. Monitor and Logs
-- Real-time log streaming via WebSocket
-- Live system status monitoring (CPU, memory, disk usage)
-- Replay history with detailed statistics
-- Error handling and user feedback
-
-## API Documentation
-
-### Endpoints
-
-#### Health Check
-- `GET /api/health` - Application health status
-
-#### File Management
-- `POST /api/upload` - Upload PCAP file (multipart/form-data)
-- `GET /api/upload/status/{file_id}` - Get upload status
-- `DELETE /api/upload/cleanup/{file_id}` - Clean up uploaded file
-
-#### System Information
-- `GET /api/interfaces` - List network interfaces with status and IP addresses
-- `GET /api/system/status` - Get system resource status (CPU, memory, disk, tcpreplay availability)
-- `GET /api/system/capabilities` - Get system capabilities and tcpreplay features
-
-#### Replay Control
-- `POST /api/replay/start` - Start PCAP replay with configuration
-- `POST /api/replay/stop` - Stop current replay
-- `GET /api/replay/status` - Get current replay status and progress
-- `GET /api/replay/history` - Get replay history (last 50 entries)
-- `POST /api/replay/validate` - Validate replay configuration
-
-#### Logging
-- `GET /api/logs/recent` - Get recent log entries
-- `GET /api/logs/stats` - Get logging statistics
-
-### WebSocket Events
-- `replay_status` - Replay status updates (starting, running, completed, failed, stopped)
-- `replay_progress` - Real-time progress updates (every 2 seconds during replay)
-- `log_stream` - Live log streaming
-
-### Request/Response Examples
-
-#### Start Replay
-```json
-POST /api/replay/start
-{
-  "file_id": "uuid-of-uploaded-file",
-  "interface": "eth0",
-  "speed": 2.0,
-  "speed_unit": "multiplier"
-}
+### Build from Source
+```bash
+git clone https://github.com/blink-zero/pcap-replaya.git
+cd pcap-replaya
+sudo docker-compose up --build
 ```
 
-#### Replay Status Response
-```json
-{
-  "replay_id": "uuid",
-  "status": "running",
-  "progress_percent": 45,
-  "packets_sent": 1250,
-  "bytes_sent": 892400,
-  "elapsed_time": 12.5,
-  "packets_per_second": 100.0
-}
-```
-
-## Configuration
-
-### Environment Variables
-
-#### Backend Configuration
-- `FLASK_ENV` - Flask environment (development/production)
-- `UPLOAD_FOLDER` - Directory for uploaded files (default: /tmp/pcap_uploads)
-- `LOG_FILE` - Log file path (default: /var/log/pcap_replaya.log)
-- `LOG_LEVEL` - Logging level (DEBUG/INFO/WARNING/ERROR, default: INFO)
-- `SECRET_KEY` - Flask secret key for sessions
-- `MAX_ANALYSIS_PACKETS` - Maximum packets to analyze (default: 1,000,000)
-
-#### Frontend Configuration
-- `REACT_APP_API_URL` - Backend API URL (default: /api)
-
-### Docker Configuration
-
-The application uses Docker Compose with the following services:
-
-#### Backend Service
-- **Base Image**: python:3.11-slim
-- **Network Mode**: host (required for network interface access)
-- **Privileged**: true (required for tcpreplay)
-- **Dependencies**: tcpreplay, tcpdump, libpcap-dev, python3-dev
-- **Volumes**: pcap_uploads, logs
-- **Health Check**: HTTP health endpoint
-
-#### Frontend Service
-- **Build Stage**: node:18-alpine (for building React app)
-- **Runtime Stage**: nginx:alpine (for serving static files)
-- **Network Mode**: host (for backend communication)
-- **Configuration**: Custom nginx.conf with API proxying
-
-#### Key Docker Features
-- Multi-stage builds for optimized image sizes
-- Host networking for direct interface access
-- Privileged containers for network operations
-- Volume persistence for uploads and logs
-- Health checks for service monitoring
-
-## Security Considerations
-
-### File Upload Security
-- **File Type Validation**: Magic byte verification for PCAP files
-- **File Size Limits**: 1GB maximum upload size
-- **Filename Sanitization**: Secure filename handling with werkzeug
-- **Temporary Storage**: Secure temporary file storage with cleanup
-- **Upload Timeouts**: 5-minute timeout for large file uploads and analysis
-
-### Network Security
-- **Input Validation**: Comprehensive validation for all API endpoints
-- **CORS Configuration**: Controlled cross-origin access
-- **Security Headers**: X-Frame-Options, X-XSS-Protection, Content-Security-Policy
-- **Interface Validation**: Alphanumeric interface name validation
-- **Speed Limits**: Maximum speed limits to prevent system overload
-
-### Container Security
-- **Privileged Access**: Required only for network interface access
-- **Host Network**: Necessary for direct interface manipulation
-- **Volume Isolation**: Isolated storage for uploads and logs
-- **Health Monitoring**: Container health checks and restart policies
-
-### Deployment Security
-- **Environment Variables**: Sensitive configuration via environment variables
-- **Log Security**: Structured logging without sensitive data exposure
-- **Process Isolation**: Containerized process isolation
-- **Access Control**: Root privileges only where necessary
-
-## Troubleshooting
+## 🔧 Troubleshooting
 
 ### Common Issues
 
-#### 1. Permission Denied for Network Interfaces
+#### Permission Denied
 ```bash
 # Ensure Docker has necessary privileges
 sudo docker-compose down
 sudo docker-compose up --build
 ```
 
-#### 2. tcpreplay Not Found or Not Working
+#### tcpreplay Not Working
 ```bash
-# Check tcpreplay installation in container
+# Check tcpreplay in container
 docker-compose exec backend tcpreplay --version
-
-# Rebuild backend container
-docker-compose build backend --no-cache
 ```
 
-#### 3. File Upload Fails
-- **Check file size**: Maximum 1GB supported
-- **Verify file format**: Only .pcap, .pcapng, .cap files accepted
-- **Check disk space**: Ensure sufficient storage available
-- **Review timeout**: Large files may take several minutes to analyze
+#### File Upload Fails
+- Check file size (max 1GB)
+- Verify file format (.pcap, .pcapng, .cap)
+- Ensure sufficient disk space
 
-#### 4. Network Interface Not Listed
-- **Check container privileges**: Ensure privileged mode is enabled
-- **Verify host network**: Container must use host networking
-- **Check interface status**: `ip link show` to verify interface exists
-- **Interface permissions**: Ensure interface is accessible
+### Debug Commands
 
-#### 5. Replay Fails to Start
-- **Interface access**: Verify tcpreplay can access the interface
-- **File corruption**: Re-upload the PCAP file
-- **Speed settings**: Check speed configuration is within limits
-- **System resources**: Ensure sufficient CPU and memory
-
-#### 6. WebSocket Connection Issues
-- **Proxy configuration**: Check nginx WebSocket proxy settings
-- **Firewall**: Ensure ports 80 and 5000 are accessible
-- **Browser compatibility**: Modern browsers required for WebSocket support
-
-### Debugging Commands
-
-#### View Application Logs
 ```bash
-# All logs
+# View logs
 docker-compose logs -f
 
-# Backend only
-docker-compose logs -f backend
-
-# Frontend only
-docker-compose logs -f frontend
-
-# System logs
-docker-compose exec backend tail -f /var/log/pcap_replaya.log
-```
-
-#### Check System Status
-```bash
-# Container status
-docker-compose ps
-
-# System resources
+# Check system status
 docker-compose exec backend python -c "
 import psutil
 print(f'CPU: {psutil.cpu_percent()}%')
 print(f'Memory: {psutil.virtual_memory().percent}%')
-print(f'Disk: {psutil.disk_usage(\"/\").percent}%')
 "
 
-# Network interfaces
-docker-compose exec backend python -c "
-import psutil
-for name, addrs in psutil.net_if_addrs().items():
-    print(f'{name}: {[addr.address for addr in addrs]}')"
-```
-
-#### Test tcpreplay
-```bash
-# Check tcpreplay version
+# Test tcpreplay
 docker-compose exec backend tcpreplay --version
-
-# Test interface access (replace eth0 with your interface)
-docker-compose exec backend tcpreplay --intf1 eth0 --dualfile
 ```
 
-### Performance Optimization
+## 📊 Technology Stack
 
-#### Large File Handling
-- Files with >100,000 packets have limited analysis for performance
-- Full replay capability maintained regardless of analysis limits
-- Memory-efficient processing using Scapy's PcapReader
-- Progress monitoring optimized to update every 2 seconds
+### Backend
+- **Flask 2.3.3** - Web framework
+- **Flask-SocketIO 5.3.6** - WebSocket communication
+- **Scapy 2.5.0** - PCAP analysis
+- **psutil 5.9.5** - System monitoring
+- **tcpreplay** - Packet replay
 
-#### System Requirements
-- **Minimum**: 2GB RAM, 2 CPU cores, 10GB disk space
-- **Recommended**: 4GB RAM, 4 CPU cores, 50GB disk space
-- **Network**: Gigabit Ethernet for high-speed replay
+### Frontend
+- **React 18.2.0** - Frontend framework
+- **Material-UI 5.14.1** - UI components
+- **axios 1.4.0** - HTTP client
+- **socket.io-client 4.7.2** - WebSocket client
 
-## Development
+### Infrastructure
+- **Docker & Docker Compose** - Containerization
+- **Nginx** - Reverse proxy
+- **Python 3.11** - Backend runtime
+- **Node.js 18** - Frontend build
 
-### Project Structure
-```
-PCAP_Replaya/
-├── backend/                    # Flask backend application
-│   ├── app.py                 # Main Flask application with SocketIO
-│   ├── config.py              # Configuration management
-│   ├── requirements.txt       # Python dependencies
-│   ├── routes/                # API route handlers
-│   │   ├── upload.py         # File upload endpoints
-│   │   ├── replay.py         # Replay control endpoints
-│   │   ├── system.py         # System information endpoints
-│   │   └── logs.py           # Logging endpoints
-│   ├── services/              # Business logic services
-│   │   ├── pcap_service.py   # PCAP analysis using Scapy
-│   │   ├── replay_service.py # tcpreplay management
-│   │   ├── history_service.py# Replay history management
-│   │   └── log_service.py    # Log streaming service
-│   └── utils/                 # Utility functions
-│       ├── validators.py     # Input validation
-│       └── logger.py         # Logging configuration
-├── frontend/                  # React frontend application
-│   ├── src/
-│   │   ├── App.js            # Main application component
-│   │   ├── components/       # React components
-│   │   │   ├── FileUpload.js # Drag-and-drop file upload
-│   │   │   ├── ReplayConfig.js# Replay configuration
-│   │   │   ├── ProgressMonitor.js# Real-time progress
-│   │   │   ├── ReplayHistory.js# History display
-│   │   │   ├── LiveLog.js    # Log streaming
-│   │   │   └── UserGuide.js  # Help documentation
-│   │   └── services/
-│   │       └── api.js        # API client with axios
-│   ├── public/               # Static assets
-│   └── package.json          # Node.js dependencies
-├── Dockerfile.backend        # Backend container definition
-├── Dockerfile.frontend       # Frontend container definition
-├── docker-compose.yml        # Container orchestration
-├── nginx.conf               # Nginx reverse proxy configuration
-├── start.sh                 # Application startup script
-├── clean-rebuild.sh         # Development rebuild script
-└── README.md               # This documentation
-```
+## 📝 License
 
-### Development Workflow
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-#### Adding New Features
-
-1. **Backend Development**
-   - Add new routes in `backend/routes/`
-   - Implement business logic in `backend/services/`
-   - Add utilities in `backend/utils/`
-   - Update configuration in `config.py`
-   - Add tests and update documentation
-
-2. **Frontend Development**
-   - Create new components in `frontend/src/components/`
-   - Add API calls in `frontend/src/services/api.js`
-   - Update main app in `frontend/src/App.js`
-   - Add Material-UI styling and responsive design
-
-3. **Integration**
-   - Update Docker configurations if needed
-   - Test with full Docker Compose stack
-   - Update API documentation
-   - Add error handling and validation
-
-#### Code Quality Standards
-
-- **Python**: Follow PEP 8 style guidelines
-- **JavaScript**: Use ES6+ features and React best practices
-- **Error Handling**: Comprehensive error handling with user feedback
-- **Logging**: Structured logging for debugging and monitoring
-- **Security**: Input validation and secure coding practices
-- **Performance**: Optimize for large file handling and real-time updates
-
-### Testing
-
-#### Backend Testing
-```bash
-cd backend
-python -m pytest tests/ -v
-```
-
-#### Frontend Testing
-```bash
-cd frontend
-npm test
-```
-
-#### Integration Testing
-```bash
-# Start application
-sudo docker-compose up --build -d
-
-# Run integration tests
-curl http://localhost:5000/api/health
-curl http://localhost/
-
-# Test file upload
-curl -X POST -F "file=@test.pcap" http://localhost:5000/api/upload
-```
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes following the development guidelines
-4. Add tests for new functionality
-5. Ensure all tests pass
-6. Update documentation as needed
-7. Submit a pull request
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-### Development Guidelines
-- Follow existing code style and patterns
-- Add comprehensive error handling
-- Include logging for debugging
-- Update API documentation for new endpoints
-- Test with various PCAP file sizes and formats
-- Ensure responsive UI design
+## 📞 Support
 
-## License
+- **Issues**: [GitHub Issues](https://github.com/blink-zero/pcap-replaya/issues)
+- **Documentation**: Check troubleshooting section above
+- **Logs**: Use `docker-compose logs -f` for debugging
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 🏷️ Version History
 
-## Support
+- **v1.3.8** - Added PCAP download feature to replay history
+- **v1.3.7** - Fixed continuous mode display in history details
+- **v1.3.6** - Fixed speed unit display (PPS showing correctly)
+- **v1.3.0** - Added continuous replay feature
+- **v1.2.0** - Enhanced replay history with pagination and search
+- **v1.0.0** - Initial release
 
-For issues and questions:
-1. Check the troubleshooting section above
-2. Review application logs using the debugging commands
-3. Check system requirements and dependencies
-4. Create an issue on the repository with:
-   - System information (OS, Docker version)
-   - Error logs and screenshots
-   - Steps to reproduce the issue
-   - PCAP file characteristics (if applicable)
+## 🙏 Acknowledgments
 
-## Acknowledgments
-
-- **tcpreplay** - Network packet replay utility for Linux
-- **Scapy** - Powerful Python library for packet manipulation and analysis
-- **React** - Frontend framework for building user interfaces
-- **Flask** - Lightweight Python web framework
-- **Material-UI** - React UI component library
-- **Docker** - Containerization platform for deployment
-- **Nginx** - High-performance web server and reverse proxy
-- **psutil** - Cross-platform library for system and process monitoring
-
-## Version History
-
-- **v1.1.0** - Enhanced replay history with pagination
-  - Added pagination support for replay history (20 items per page)
-  - Improved performance for large history datasets
-  - Enhanced filtering and search functionality
-  - Better user experience with navigation controls
-  - Backend API optimization with limit/offset parameters
-
-- **v1.0.0** - Initial release with core PCAP replay functionality
-  - File upload and analysis
-  - tcpreplay integration
-  - Real-time monitoring
-  - Docker containerization
-  - Material-UI interface
-  - WebSocket communication
-  - Replay history tracking
+- [tcpreplay](https://tcpreplay.appneta.com/) - Network packet replay utility
+- [Scapy](https://scapy.net/) - Packet manipulation library
+- [React](https://reactjs.org/) - Frontend framework
+- [Flask](https://flask.palletsprojects.com/) - Backend framework
+- [Material-UI](https://mui.com/) - UI component library

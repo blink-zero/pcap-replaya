@@ -5,6 +5,36 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.9] - 2025-08-08
+
+### Improved
+- **Documentation Overhaul**: Complete README restructure and cleanup
+  - Streamlined and organized content with clear sections
+  - Added comprehensive API documentation with all endpoints
+  - Included request/response examples for all major operations
+  - Added proper endpoint tables with methods and descriptions
+  - Enhanced troubleshooting and development sections
+  - Updated version badges and modern formatting
+  - Improved navigation with emoji icons and clear structure
+  - Added WebSocket events documentation
+  - Better organized technology stack and architecture information
+
+### Enhanced
+- **API Documentation**: Complete endpoint reference
+  - Health & System endpoints
+  - File Management operations (including new download endpoint)
+  - Replay Control with all parameters
+  - Packet Manipulation endpoints
+  - Logging endpoints
+  - Request/response examples with proper JSON formatting
+  - WebSocket events documentation
+
+### Technical Improvements
+- Better documentation structure for developers and users
+- Clear API reference for integration purposes
+- Improved onboarding experience with streamlined quick start
+- Enhanced troubleshooting guidance
+
 ## [1.3.8] - 2025-08-08
 
 ### Added
