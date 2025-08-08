@@ -108,8 +108,8 @@ function App() {
   const handleReplayComplete = (replayData) => {
     console.log('Replay completed:', replayData);
     
-    // Auto-reset the upload after replay completes
-    if (replayData.status === 'completed' || replayData.status === 'failed' || replayData.status === 'stopped') {
+    // Only reset when replay is actually stopped/failed, not when continuous replay completes a loop
+    if (replayData.status === 'failed' || replayData.status === 'stopped') {
       // Clear the uploaded file to allow new upload
       setUploadedFile(null);
       
@@ -121,6 +121,8 @@ function App() {
         continuous: false,
       });
     }
+    // For continuous replay, don't reset anything when status is 'completed' 
+    // because it just means one loop finished and it will continue
   };
 
   const handleReplayFromHistory = (replayData) => {

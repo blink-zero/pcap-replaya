@@ -355,7 +355,12 @@ class ReplayManager:
                 elif not self.is_replay_running:
                     self.replay_stats['status'] = 'stopped'
                 else:
-                    self.replay_stats['status'] = 'completed'
+                    # For continuous replay, only set to 'completed' if it was manually stopped
+                    # Otherwise, continuous replay should never reach this point
+                    if continuous:
+                        self.replay_stats['status'] = 'stopped'  # Continuous was stopped
+                    else:
+                        self.replay_stats['status'] = 'completed'  # Normal replay completed
                     self.replay_stats['progress_percent'] = 100
                 
                 self.replay_stats['end_time'] = datetime.utcnow().isoformat()
