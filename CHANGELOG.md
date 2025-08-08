@@ -5,6 +5,20 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.6] - 2025-08-08
+
+### Fixed
+- **Speed Unit Display**: Fixed history details not showing PPS (Packets Per Second) unit correctly
+  - Added missing `pps` case to `formatSpeed()` function in frontend
+  - History details now properly display "100 PPS" instead of "100x" for PPS-based replays
+  - Speed formatting now correctly handles all units: multiplier (x), PPS, Mbps, Gbps
+  - Improves clarity in replay history when reviewing different speed configurations
+
+### Technical Improvements
+- Enhanced speed unit formatting for better user experience
+- Consistent speed display across all UI components
+- Better differentiation between speed modes in history view
+
 ## [1.3.5] - 2025-08-08
 
 ### Fixed

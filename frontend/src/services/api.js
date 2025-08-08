@@ -134,6 +134,8 @@ export const formatDuration = (seconds) => {
 
 export const formatSpeed = (speed, unit) => {
   switch (unit) {
+    case 'pps':
+      return `${speed} PPS`;
     case 'mbps':
       return `${speed} Mbps`;
     case 'gbps':
