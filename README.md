@@ -11,6 +11,10 @@ A comprehensive web application for replaying network packet capture (PCAP) file
 - **Speed Control**: Flexible replay speed configuration with two modes:
   - **Multiplier**: Real-time speed multiplier (e.g., 1.0x = real-time, 2.0x = double speed)
   - **PPS**: Packets per second (up to 1,000,000 pps)
+- **Continuous Replay**: Option to replay PCAP files continuously until manually stopped
+  - **Loop Count Tracking**: Real-time display of current loop iteration
+  - **Automatic Restart**: Seamless looping with small delays between iterations
+  - **Manual Control**: Stop continuous replay at any time
 - **Real-time Monitoring**: Live progress tracking with WebSocket updates via Flask-SocketIO
 - **Process Management**: Start, stop, and monitor replay operations with tcpreplay integration
 - **Replay History**: Persistent history of all replay operations with status tracking
@@ -181,9 +185,9 @@ The update process will:
 - ✅ Restart services with zero configuration changes needed
 
 ### Version Information
-- **Current Version**: v1.1.0 (with pagination support)
-- **Previous Version**: v1.0.4
-- **Update Benefits**: Enhanced replay history with pagination, improved performance for large datasets
+- **Current Version**: v1.3.0 (with continuous replay feature)
+- **Previous Version**: v1.2.1
+- **Update Benefits**: Continuous replay capability, enhanced pagination, improved performance for large datasets
 
 ### Troubleshooting Updates
 If you encounter issues during update:

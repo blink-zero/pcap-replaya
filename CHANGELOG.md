@@ -5,6 +5,30 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-08-08
+
+### Added
+- **Continuous Replay Feature**: Added ability to replay PCAP files continuously until manually stopped
+  - New "Continuous Replay" checkbox in replay configuration interface
+  - Backend support for looping PCAP replay automatically
+  - Loop count tracking and display in progress monitor
+  - Continuous mode indicator in replay status and history
+  - Enhanced replay service with automatic restart logic between loops
+  - Warning alerts to inform users about continuous mode behavior
+
+### Changed
+- **Replay Configuration**: Extended replay config to include continuous option
+- **Progress Monitor**: Enhanced to display loop count for continuous replays
+- **Replay History**: Updated to store and display continuous mode setting
+- **Backend API**: Modified replay endpoints to accept continuous parameter
+
+### Technical Improvements
+- Enhanced replay service with loop management and status tracking
+- Improved WebSocket communication for continuous replay progress updates
+- Better error handling and graceful termination for continuous replays
+- Small delay between loops to prevent system overload
+- Comprehensive logging for continuous replay operations
+
 ## [1.2.1] - 2025-07-30
 
 ### Fixed
