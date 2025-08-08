@@ -5,6 +5,21 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.10] - 2025-08-08
+
+### Fixed
+- **History Details Display**: Improved replay mode display in history details
+  - Changed "Loop: Yes/No" to more descriptive "Mode: Continuous (loops until stopped)" or "Mode: Single run"
+  - Removed confusing "Preload PCAP" parameter from history details view
+  - Better differentiation between continuous replay mode and single run mode
+  - Cleaner, more intuitive display of replay configuration in history details
+
+### Enhanced
+- **User Experience**: More intuitive replay configuration display
+  - Clear indication when a replay was run in continuous mode
+  - Simplified history details with only relevant configuration parameters
+  - Better visual distinction between different replay modes
+
 ## [1.3.9] - 2025-08-08
 
 ### Improved

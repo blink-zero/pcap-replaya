@@ -393,9 +393,10 @@ const ReplayHistory = ({ onReplayStart }) => {
                 <Box sx={{ mb: 3 }}>
                   <Typography><strong>Interface:</strong> {selectedReplay.config.interface}</Typography>
                   <Typography><strong>Speed:</strong> {formatSpeed(selectedReplay.config.speed, selectedReplay.config.speed_unit)}</Typography>
-                  <Typography><strong>Continuous:</strong> {selectedReplay.config.continuous ? 'Yes' : 'No'}</Typography>
-                  <Typography><strong>Loop:</strong> {selectedReplay.config.loop ? 'Yes' : 'No'}</Typography>
-                  <Typography><strong>Preload PCAP:</strong> {selectedReplay.config.preload_pcap ? 'Yes' : 'No'}</Typography>
+                  <Typography><strong>Mode:</strong> {selectedReplay.config.continuous ? 'Continuous (loops until stopped)' : 'Single run'}</Typography>
+                  {selectedReplay.config.loop && typeof selectedReplay.config.loop === 'number' && selectedReplay.config.loop > 1 && (
+                    <Typography><strong>Loop Count:</strong> {selectedReplay.config.loop}</Typography>
+                  )}
                 </Box>
 
                 <Typography variant="h6" gutterBottom>
