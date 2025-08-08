@@ -5,6 +5,22 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.5] - 2025-08-08
+
+### Fixed
+- **Critical Status Override Bug**: Fixed replay thread overriding manual stop status
+  - Identified and fixed race condition where replay thread was overriding "stopped" status with "failed"
+  - Added status protection to prevent thread completion from changing manually set "stopped" status
+  - When user manually stops a replay, the status now permanently remains "stopped" in history
+  - Enhanced logging to show when thread completion is skipped due to manual stop
+  - This was the root cause of manually stopped replays appearing as "failed" in history
+
+### Technical Improvements
+- Added status checking before thread completion updates
+- Prevented duplicate status updates from different execution paths
+- Better separation of manual stop vs thread completion logic
+- Enhanced debugging information for status determination
+
 ## [1.3.4] - 2025-08-08
 
 ### Fixed

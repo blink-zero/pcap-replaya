@@ -354,28 +354,35 @@ class ReplayManager:
             
             # Update final status
             with self.lock:
-                if self.replay_stats.get('error'):
-                    self.replay_stats['status'] = 'failed'
-                elif not self.is_replay_running:
-                    self.replay_stats['status'] = 'stopped'
-                else:
-                    # For continuous replay, only set to 'completed' if it was manually stopped
-                    # Otherwise, continuous replay should never reach this point
-                    if continuous:
-                        self.replay_stats['status'] = 'stopped'  # Continuous was stopped
+                # Only update status if it hasn't already been set to 'stopped' by manual stop
+                current_status = self.replay_stats.get('status')
+                if current_status != 'stopped':
+                    if self.replay_stats.get('error'):
+                        self.replay_stats['status'] = 'failed'
+                    elif not self.is_replay_running:
+                        self.replay_stats['status'] = 'stopped'
                     else:
-                        self.replay_stats['status'] = 'completed'  # Normal replay completed
-                    self.replay_stats['progress_percent'] = 100
+                        # For continuous replay, only set to 'completed' if it was manually stopped
+                        # Otherwise, continuous replay should never reach this point
+                        if continuous:
+                            self.replay_stats['status'] = 'stopped'  # Continuous was stopped
+                        else:
+                            self.replay_stats['status'] = 'completed'  # Normal replay completed
+                        self.replay_stats['progress_percent'] = 100
+                    
+                    self.replay_stats['end_time'] = datetime.utcnow().isoformat()
+                    
+                    # Update history service only if status changed
+                    self._update_history_status()
+                    
+                    # Final status update
+                    if self.socketio:
+                        self.socketio.emit('replay_status', self.replay_stats)
+                else:
+                    # Status was already set to 'stopped' by manual stop - don't override it
+                    logging.info(f"Replay {replay_id} thread completed but status already set to 'stopped' - not overriding")
                 
-                self.replay_stats['end_time'] = datetime.utcnow().isoformat()
                 self.is_replay_running = False
-                
-                # Update history service
-                self._update_history_status()
-                
-                # Final status update
-                if self.socketio:
-                    self.socketio.emit('replay_status', self.replay_stats)
             
             if continuous:
                 logging.info(f"Continuous replay {replay_id} completed {self.replay_stats['loop_count']} loops")
