@@ -53,6 +53,7 @@ def start_replay():
             interface=config['interface'],
             speed=config['speed'],
             speed_unit=config['speed_unit'],
+            continuous=config.get('continuous', False),
             socketio=current_app.config.get('SOCKETIO')
         )
         
@@ -70,6 +71,7 @@ def start_replay():
             'interface': config['interface'],
             'speed': config['speed'],
             'speed_unit': config['speed_unit'],
+            'continuous': config.get('continuous', False),
             'loop': config.get('loop', False),
             'preload_pcap': config.get('preload_pcap', False),
             'replay_id': replay_id

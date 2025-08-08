@@ -16,6 +16,7 @@ import {
   Alert,
   Chip,
   Grid,
+  Checkbox,
 } from '@mui/material';
 import { apiService } from '../services/api';
 
@@ -55,6 +56,10 @@ const ReplayConfig = ({ config, setConfig, disabled = false }) => {
 
   const handleInterfaceChange = (event) => {
     setConfig(prev => ({ ...prev, interface: event.target.value }));
+  };
+
+  const handleContinuousReplayChange = (event) => {
+    setConfig(prev => ({ ...prev, continuous: event.target.checked }));
   };
 
   const getSpeedLabel = () => {
@@ -198,6 +203,31 @@ const ReplayConfig = ({ config, setConfig, disabled = false }) => {
               margin="normal"
             />
           </Grid>
+
+          <Grid item xs={12}>
+            <FormControl component="fieldset" margin="normal">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={config.continuous || false}
+                    onChange={handleContinuousReplayChange}
+                    disabled={disabled}
+                    color="primary"
+                  />
+                }
+                label={
+                  <Box>
+                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                      Continuous Replay
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      Replay the PCAP file continuously until manually stopped
+                    </Typography>
+                  </Box>
+                }
+              />
+            </FormControl>
+          </Grid>
         </Grid>
 
         {interfaces.length > 0 && (
@@ -219,6 +249,18 @@ const ReplayConfig = ({ config, setConfig, disabled = false }) => {
                 ? `${config.speed} PPS`
                 : `${config.speed}x speed`}
             </strong>
+            {config.continuous && (
+              <span>
+                {' '}in <strong>continuous mode</strong> (will loop until stopped)
+              </span>
+            )}
+          </Alert>
+        )}
+
+        {config.continuous && (
+          <Alert severity="warning" sx={{ mt: 1 }}>
+            <strong>Continuous Mode:</strong> The PCAP will replay repeatedly until you manually stop it. 
+            Make sure to monitor the replay and stop it when needed.
           </Alert>
         )}
       </CardContent>

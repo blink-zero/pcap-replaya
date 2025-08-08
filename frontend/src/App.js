@@ -75,6 +75,7 @@ function App() {
     interface: '',
     speed: 1.0,
     speed_unit: 'multiplier',
+    continuous: false,
   });
   const [guideOpen, setGuideOpen] = useState(false);
   const [versionInfo, setVersionInfo] = useState(null);
@@ -117,6 +118,7 @@ function App() {
         interface: '',
         speed: 1.0,
         speed_unit: 'multiplier',
+        continuous: false,
       });
     }
   };

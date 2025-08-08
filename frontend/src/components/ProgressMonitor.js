@@ -124,6 +124,7 @@ const ProgressMonitor = ({ uploadedFile, replayConfig, onReplayComplete }) => {
         interface: replayConfig.interface,
         speed: replayConfig.speed,
         speed_unit: replayConfig.speed_unit || 'multiplier',
+        continuous: replayConfig.continuous || false,
       };
 
       const response = await apiService.startReplay(config);
@@ -271,6 +272,14 @@ const ProgressMonitor = ({ uploadedFile, replayConfig, onReplayComplete }) => {
                 ? `${replayStatus.speed} PPS` 
                 : `${replayStatus.speed}x`}
             </Typography>
+            {replayStatus.continuous && (
+              <Typography variant="body2">
+                <strong>Mode:</strong> Continuous Replay
+                {replayStatus.loop_count > 0 && (
+                  <span> (Loop #{replayStatus.loop_count})</span>
+                )}
+              </Typography>
+            )}
             {replayStatus.file_path && (
               <Typography variant="body2">
                 <strong>File:</strong> {replayStatus.file_path.split('/').pop()}

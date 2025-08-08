@@ -103,6 +103,7 @@ const ReplayHistory = ({ onReplayStart }) => {
         interface: historyItem.config.interface,
         speed: historyItem.config.speed,
         speed_unit: historyItem.config.speed_unit,
+        continuous: historyItem.config.continuous || false,
         loop: historyItem.config.loop || false,
         preload_pcap: historyItem.config.preload_pcap || false,
       };
@@ -373,6 +374,7 @@ const ReplayHistory = ({ onReplayStart }) => {
                 <Box sx={{ mb: 3 }}>
                   <Typography><strong>Interface:</strong> {selectedReplay.config.interface}</Typography>
                   <Typography><strong>Speed:</strong> {formatSpeed(selectedReplay.config.speed, selectedReplay.config.speed_unit)}</Typography>
+                  <Typography><strong>Continuous:</strong> {selectedReplay.config.continuous ? 'Yes' : 'No'}</Typography>
                   <Typography><strong>Loop:</strong> {selectedReplay.config.loop ? 'Yes' : 'No'}</Typography>
                   <Typography><strong>Preload PCAP:</strong> {selectedReplay.config.preload_pcap ? 'Yes' : 'No'}</Typography>
                 </Box>
