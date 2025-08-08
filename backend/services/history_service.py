@@ -53,6 +53,7 @@ class ReplayHistoryService:
                     'interface': replay_data.get('interface'),
                     'speed': replay_data.get('speed'),
                     'speed_unit': replay_data.get('speed_unit'),
+                    'continuous': replay_data.get('continuous', False),
                     'loop': replay_data.get('loop', False),
                     'preload_pcap': replay_data.get('preload_pcap', False)
                 },

@@ -5,6 +5,20 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.7] - 2025-08-08
+
+### Fixed
+- **Continuous Mode History Display**: Fixed history details not showing continuous mode correctly
+  - Added missing `continuous` parameter to history service configuration storage
+  - History details now properly display "Continuous: Yes" for continuous replays
+  - Fixed issue where continuous replays were always showing "Continuous: No" in view details
+  - Ensures accurate replay configuration tracking in history
+
+### Technical Improvements
+- Enhanced history service to store complete replay configuration
+- Better configuration persistence for all replay modes
+- Improved accuracy of historical replay information
+
 ## [1.3.6] - 2025-08-08
 
 ### Fixed
