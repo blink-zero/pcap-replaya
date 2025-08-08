@@ -113,6 +113,17 @@ def validate_replay_config(config):
     
     sanitized['speed_unit'] = speed_unit
     
+    # Validate continuous replay option
+    continuous = config.get('continuous', False)
+    if not isinstance(continuous, bool):
+        # Try to convert string to boolean
+        if isinstance(continuous, str):
+            continuous = continuous.lower() in ['true', '1', 'yes', 'on']
+        else:
+            continuous = bool(continuous)
+    
+    sanitized['continuous'] = continuous
+    
     return True, None, sanitized
 
 

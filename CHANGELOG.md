@@ -5,6 +5,25 @@ All notable changes to PCAP Replaya will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.3] - 2025-08-08
+
+### Fixed
+- **Critical Validator Bug**: Fixed `validate_replay_config` function that was stripping out the `continuous` parameter
+  - Backend validator was only validating `speed`, `interface`, and `speed_unit` but ignoring `continuous`
+  - Added proper validation and sanitization for the `continuous` parameter in backend
+  - Continuous replay parameter now properly passes through the entire request pipeline
+  - This was the root cause preventing continuous replay from working
+
+### Added
+- **Beta UI Indicator**: Added "BETA" tag to Continuous Replay checkbox in UI
+  - Orange warning-colored chip indicates the feature is in beta testing
+  - Helps users understand the experimental nature of continuous replay
+
+### Technical Improvements
+- Enhanced parameter validation with proper boolean conversion for continuous flag
+- Better error handling for malformed continuous parameter values
+- Improved frontend visual indicators for experimental features
+
 ## [1.3.2] - 2025-08-08
 
 ### Fixed

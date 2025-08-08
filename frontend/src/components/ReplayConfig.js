@@ -217,9 +217,18 @@ const ReplayConfig = ({ config, setConfig, disabled = false }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                      Continuous Replay
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                        Continuous Replay
+                      </Typography>
+                      <Chip
+                        label="BETA"
+                        size="small"
+                        color="warning"
+                        variant="outlined"
+                        sx={{ fontSize: '0.7rem', height: '20px' }}
+                      />
+                    </Box>
                     <Typography variant="caption" color="text.secondary">
                       Replay the PCAP file continuously until manually stopped
                     </Typography>
